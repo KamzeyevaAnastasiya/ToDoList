@@ -1,5 +1,5 @@
 export const AddTaskForm = () => {
-	return (
+    return (
         <div>
             <input/>
             <button>+</button>

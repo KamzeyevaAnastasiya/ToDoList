@@ -1,9 +1,9 @@
 type TodolistTitleProps = {
-	title: string
+    title: string
 }
 
 export const TodolistTitle = (props: TodolistTitleProps) => {
-	return (
+    return (
         <h3>{props.title}</h3>
     )
 }

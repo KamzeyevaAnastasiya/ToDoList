@@ -1,11 +1,16 @@
-import { Button } from "./Button"
+import {Button} from './Button'
+import {FilterValues} from '../App.tsx';
 
-export const FilterButtons = () => {
-	return (
+type ButtonType = {
+    changeFilter: (nextFilter: FilterValues) => void
+}
+
+export const FilterButtons = ({changeFilter}: ButtonType) => {
+    return (
         <div>
-            <Button title={"All"}/>
-            <Button title={"Active"}/>
-            <Button title={"Completed"}/>
+            <Button title={'All'} onClickHandler={() => changeFilter('All')}/>
+            <Button title={'Active'} onClickHandler={() => changeFilter('Active')}/>
+            <Button title={'Completed'} onClickHandler={() => changeFilter('Comleted')}/>
         </div>
     )
 }
