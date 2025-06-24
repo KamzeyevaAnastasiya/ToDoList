@@ -9,13 +9,14 @@ type TodolistItemProps = {
     tasks: TaskType[]
     deleteTask: (taskId: TaskType['id']) => void
     changeFilter: (nextFilter: FilterValues) => void
+    createTask: (title: string) => void
 }
 
-export const TodolistItem = ({title, tasks, deleteTask, changeFilter}: TodolistItemProps) => {
+export const TodolistItem = ({title, tasks, deleteTask, changeFilter, createTask}: TodolistItemProps) => {
     return (
         <div>
             <TodolistTitle title={title}/>
-            <AddTaskForm/>
+            <AddTaskForm createTask={createTask}/>
             <TasksList tasks={tasks} deleteTask={deleteTask}/>
             <FilterButtons changeFilter={changeFilter}/>
         </div>

@@ -12,12 +12,13 @@ export const TasksList = ({tasks, deleteTask}: TasksListProps) => {
         ? <span>Ваш список пуст</span>
         : <ul>
             {tasks.map(tasks => {
+                const onClickButtonHandler = () => {
+                    deleteTask(tasks.id)
+                }
                 return (
                     <li key={tasks.id}>
                         <input type="checkbox" checked={tasks.isDone}/> <span>{tasks.title}</span>
-                        <Button title={'x'} onClickHandler={() => {
-                            deleteTask(tasks.id)
-                        }}/>
+                        <Button title={'x'} onClickHandler={onClickButtonHandler}/>
                     </li>
                 )
             })}
