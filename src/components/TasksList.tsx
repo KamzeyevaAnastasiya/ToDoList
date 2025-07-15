@@ -1,12 +1,14 @@
 import {TaskType} from '../App'
 import {Button} from './Button.tsx';
+import {ChangeEvent} from 'react';
 
 type TasksListProps = {
     tasks: TaskType[]
     deleteTask: (taskId: TaskType['id']) => void
+    changeStatusTask: (taskId: string, isDone: boolean) => void
 }
 
-export const TasksList = ({tasks, deleteTask}: TasksListProps) => {
+export const TasksList = ({tasks, deleteTask, changeStatusTask}: TasksListProps) => {
 
     const tasksList = tasks.length === 0
         ? <span>Ваш список пуст</span>
@@ -15,9 +17,15 @@ export const TasksList = ({tasks, deleteTask}: TasksListProps) => {
                 const onClickButtonHandler = () => {
                     deleteTask(tasks.id)
                 }
+
+                const onChangeStatusTask = (event: ChangeEvent<HTMLInputElement>) => {
+                    changeStatusTask(tasks.id, event.currentTarget.checked)
+                }
+
                 return (
-                    <li key={tasks.id}>
-                        <input type="checkbox" checked={tasks.isDone}/> <span>{tasks.title}</span>
+                    <li key={tasks.id} className={tasks.isDone ? 'is-done' : ''}>
+                        <input onChange={onChangeStatusTask} type="checkbox" checked={tasks.isDone}/>
+                        <span>{tasks.title}</span>
                         <Button title={'x'} onClickHandler={onClickButtonHandler}/>
                     </li>
                 )

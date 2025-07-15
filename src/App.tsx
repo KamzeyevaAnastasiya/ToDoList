@@ -3,7 +3,7 @@ import {TodolistItem} from './components/TodolistItem'
 import {useState} from 'react';
 import {v1} from 'uuid';
 
-export type FilterValues = 'All' | 'Active' | 'Comleted'
+export type FilterValues = 'All' | 'Active' | 'Completed'
 
 export type TaskType = {
     id: string
@@ -42,8 +42,13 @@ export const App = () => {
     if (filter === 'Active') {
         filteredTasks = tasks.filter(t => !t.isDone)
     }
-    if (filter === 'Comleted') {
+    if (filter === 'Completed') {
         filteredTasks = tasks.filter(t => t.isDone)
+    }
+
+    const changeStatusTask = (taskId: string, isDone: boolean) => {
+        const newState = tasks.map(task => task.id == taskId ? {...task, isDone} : task)
+        setTasks(newState)
     }
 
     return (
@@ -54,6 +59,8 @@ export const App = () => {
                 deleteTask={deleteTask}
                 changeFilter={changeFilter}
                 createTask={createTask}
+                changeStatusTask={changeStatusTask}
+                filter={filter}
             />
         </div>
     )

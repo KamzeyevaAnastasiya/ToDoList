@@ -3,14 +3,15 @@ import {FilterValues} from '../App.tsx';
 
 type ButtonType = {
     changeFilter: (nextFilter: FilterValues) => void
+    filter: FilterValues
 }
 
-export const FilterButtons = ({changeFilter}: ButtonType) => {
+export const FilterButtons = ({changeFilter, filter}: ButtonType) => {
     return (
         <div>
-            <Button title={'All'} onClickHandler={() => changeFilter('All')}/>
-            <Button title={'Active'} onClickHandler={() => changeFilter('Active')}/>
-            <Button title={'Completed'} onClickHandler={() => changeFilter('Comleted')}/>
+            <Button className={filter === 'All' ?'active-filter' : ''} title={'All'} onClickHandler={() => changeFilter('All')}/>
+            <Button className={filter === 'Active' ?'active-filter' : ''} title={'Active'} onClickHandler={() => changeFilter('Active')}/>
+            <Button className={filter === 'Completed' ?'active-filter' : ''} title={'Completed'} onClickHandler={() => changeFilter('Completed')}/>
         </div>
     )
 }

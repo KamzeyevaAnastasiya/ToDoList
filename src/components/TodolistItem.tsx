@@ -10,15 +10,17 @@ type TodolistItemProps = {
     deleteTask: (taskId: TaskType['id']) => void
     changeFilter: (nextFilter: FilterValues) => void
     createTask: (title: string) => void
+    changeStatusTask: (taskId: string, isDone: boolean) => void
+    filter: FilterValues
 }
 
-export const TodolistItem = ({title, tasks, deleteTask, changeFilter, createTask}: TodolistItemProps) => {
+export const TodolistItem = ({title, tasks, deleteTask, changeFilter, createTask, changeStatusTask, filter}: TodolistItemProps) => {
     return (
         <div>
             <TodolistTitle title={title}/>
             <AddTaskForm createTask={createTask}/>
-            <TasksList tasks={tasks} deleteTask={deleteTask}/>
-            <FilterButtons changeFilter={changeFilter}/>
+            <TasksList tasks={tasks} deleteTask={deleteTask} changeStatusTask={changeStatusTask}/>
+            <FilterButtons changeFilter={changeFilter} filter={filter}/>
         </div>
     )
 }
