@@ -5,22 +5,35 @@ import {FilterButtons} from '../components/FilterButtons'
 import {FilterValues, TaskType} from '../App'
 
 type TodolistItemProps = {
+    todolistId: string
     title: string
-    tasks: TaskType[]
-    deleteTask: (taskId: TaskType['id']) => void
-    changeFilter: (nextFilter: FilterValues) => void
-    createTask: (title: string) => void
-    changeStatusTask: (taskId: string, isDone: boolean) => void
     filter: FilterValues
+    tasks: TaskType[]
+    deleteTask: (todolistId: string, taskId: TaskType['id']) => void
+    changeTodolistFilter: (todolistId: string, nextFilter: FilterValues) => void
+    createTask: (todolistId: string, title: string) => void
+    changeStatusTask: (todolistId: string, taskId: string, isDone: boolean) => void
+    deleteTodolist: (todolistId: string) => void
+
 }
 
-export const TodolistItem = ({title, tasks, deleteTask, changeFilter, createTask, changeStatusTask, filter}: TodolistItemProps) => {
+export const TodolistItem = ({
+                                 todolistId,
+                                 title,
+                                 filter,
+                                 tasks,
+                                 deleteTask,
+                                 changeTodolistFilter,
+                                 createTask,
+                                 changeStatusTask,
+                                 deleteTodolist
+                             }: TodolistItemProps) => {
     return (
         <div>
-            <TodolistTitle title={title}/>
-            <AddTaskForm createTask={createTask}/>
-            <TasksList tasks={tasks} deleteTask={deleteTask} changeStatusTask={changeStatusTask}/>
-            <FilterButtons changeFilter={changeFilter} filter={filter}/>
+            <TodolistTitle todolistId={todolistId} title={title} deleteTodolist={deleteTodolist}/>
+            <AddTaskForm todolistId={todolistId} createTask={createTask}/>
+            <TasksList todolistId={todolistId} tasks={tasks} deleteTask={deleteTask} changeStatusTask={changeStatusTask}/>
+            <FilterButtons todolistId={todolistId} filter={filter} changeTodolistFilter={changeTodolistFilter}/>
         </div>
     )
 }

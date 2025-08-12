@@ -3,23 +3,24 @@ import {Button} from './Button.tsx';
 import {ChangeEvent} from 'react';
 
 type TasksListProps = {
+    todolistId: string
     tasks: TaskType[]
-    deleteTask: (taskId: TaskType['id']) => void
-    changeStatusTask: (taskId: string, isDone: boolean) => void
+    deleteTask: (todolistId: string, taskId: TaskType['id']) => void
+    changeStatusTask: (todolistId: string, taskId: string, isDone: boolean) => void
 }
 
-export const TasksList = ({tasks, deleteTask, changeStatusTask}: TasksListProps) => {
+export const TasksList = ({todolistId, tasks, deleteTask, changeStatusTask}: TasksListProps) => {
 
     const tasksList = tasks.length === 0
         ? <span>Ваш список пуст</span>
         : <ul>
             {tasks.map(tasks => {
                 const onClickButtonHandler = () => {
-                    deleteTask(tasks.id)
+                    deleteTask(todolistId, tasks.id)
                 }
 
                 const onChangeStatusTask = (event: ChangeEvent<HTMLInputElement>) => {
-                    changeStatusTask(tasks.id, event.currentTarget.checked)
+                    changeStatusTask(todolistId, tasks.id, event.currentTarget.checked)
                 }
 
                 return (

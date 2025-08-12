@@ -2,10 +2,11 @@ import {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {Button} from './Button.tsx';
 
 type AddTaskFormType = {
-    createTask: (title: string) => void
+    todolistId: string
+    createTask: (todolistId: string, title: string) => void
 }
 
-export const AddTaskForm = ({createTask}: AddTaskFormType) => {
+export const AddTaskForm = ({todolistId, createTask}: AddTaskFormType) => {
     const [taskTitle, setTaskTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
@@ -15,7 +16,7 @@ export const AddTaskForm = ({createTask}: AddTaskFormType) => {
     }
     const onButtonClickHandler = () => {
         if (taskTitle.trim()) {
-            createTask(taskTitle.trim())
+            createTask(todolistId, taskTitle.trim())
             setTaskTitle('')
         } else {
             setError('Title is required')
