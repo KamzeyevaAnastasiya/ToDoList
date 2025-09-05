@@ -4,6 +4,7 @@ type Props = {
     className?: string
 }
 
+
 export const Button = ({title, onClickHandler, className}: Props) => {
     return (
         <button className={className} onClick={onClickHandler}>{title}</button>

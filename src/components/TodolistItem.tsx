@@ -1,7 +1,7 @@
 import {TodolistTitle} from './TodolistTitle'
-import {AddTaskForm} from '../components/AddTaskForm'
-import {TasksList} from '../components/TasksList'
-import {FilterButtons} from '../components/FilterButtons'
+import {AddItemForm} from './AddItemForm.tsx'
+import {TasksList} from './TasksList.tsx'
+import {FilterButtons} from './FilterButtons.tsx'
 import {FilterValues, TaskType} from '../App'
 
 type TodolistItemProps = {
@@ -14,8 +14,10 @@ type TodolistItemProps = {
     createTask: (todolistId: string, title: string) => void
     changeStatusTask: (todolistId: string, taskId: string, isDone: boolean) => void
     deleteTodolist: (todolistId: string) => void
-
+    changeTaskTitle: (todolistId: string, title: string, taskId: TaskType['id']) => void
+    changeTodolistTitle: (todolistId: string, title: string) => void
 }
+
 
 export const TodolistItem = ({
                                  todolistId,
@@ -26,14 +28,31 @@ export const TodolistItem = ({
                                  changeTodolistFilter,
                                  createTask,
                                  changeStatusTask,
-                                 deleteTodolist
+                                 deleteTodolist,
+                                 changeTaskTitle,
+                                 changeTodolistTitle,
                              }: TodolistItemProps) => {
+
+    const onCreateTaskHandler = (taskTitle: string) => {
+        createTask(todolistId, taskTitle)
+    }
+
+
     return (
         <div>
-            <TodolistTitle todolistId={todolistId} title={title} deleteTodolist={deleteTodolist}/>
-            <AddTaskForm todolistId={todolistId} createTask={createTask}/>
-            <TasksList todolistId={todolistId} tasks={tasks} deleteTask={deleteTask} changeStatusTask={changeStatusTask}/>
-            <FilterButtons todolistId={todolistId} filter={filter} changeTodolistFilter={changeTodolistFilter}/>
+            <TodolistTitle todolistId={todolistId}
+                           title={title}
+                           deleteTodolist={deleteTodolist}
+                           changeTodolistTitle={changeTodolistTitle}/>
+            <AddItemForm onCreateItem={onCreateTaskHandler}/>
+            <TasksList todolistId={todolistId}
+                       tasks={tasks}
+                       deleteTask={deleteTask}
+                       changeStatusTask={changeStatusTask}
+                       changeTaskTitle={changeTaskTitle}/>
+            <FilterButtons todolistId={todolistId}
+                           filter={filter}
+                           changeTodolistFilter={changeTodolistFilter}/>
         </div>
     )
 }

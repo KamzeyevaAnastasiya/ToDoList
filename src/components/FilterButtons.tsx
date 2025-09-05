@@ -1,16 +1,19 @@
 import {Button} from './Button'
 import {FilterValues} from '../App.tsx';
 
+
 type ButtonType = {
     todolistId: string
     filter: FilterValues
     changeTodolistFilter: (todolistId: string, nextFilter: FilterValues) => void
 }
 
+
 export const FilterButtons = ({todolistId, filter, changeTodolistFilter}: ButtonType) => {
     const changeFilterHandler = (filter: FilterValues) => {
         changeTodolistFilter(todolistId, filter)
     }
+
 
     return (
         <div>
