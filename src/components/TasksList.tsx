@@ -1,7 +1,13 @@
 import {TaskType} from '../App'
-import {Button} from './Button.tsx';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {ChangeEvent} from 'react';
 import {EditableSpan} from './EditableSpan.tsx';
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import Box from '@mui/material/Box'
+import {containerSx, listItemSx} from './TasksList.styles.ts';
 
 
 type TasksListProps = {
@@ -17,7 +23,7 @@ export const TasksList = ({todolistId, tasks, deleteTask, changeStatusTask, chan
 
     const tasksList = tasks.length === 0
         ? <span>Ваш список пуст</span>
-        : <ul>
+        : <List>
             {tasks.map(tasks => {
                 const onClickButtonHandler = () => {
                     deleteTask(todolistId, tasks.id)
@@ -32,19 +38,25 @@ export const TasksList = ({todolistId, tasks, deleteTask, changeStatusTask, chan
                 }
 
                 return (
-                    <li key={tasks.id} className={tasks.isDone ? 'is-done' : ''}>
-                        <input onChange={onChangeStatusTask} type="checkbox" checked={tasks.isDone}/>
-                        <EditableSpan value={tasks.title} onChange={onChangeTaskTitle}/>
-                        <Button title={'x'} onClickHandler={onClickButtonHandler}/>
-                    </li>
+                    <ListItem key={tasks.id}
+                              sx={listItemSx(tasks.isDone)}>
+                        <div>
+                            <Checkbox
+                                checked={tasks.isDone}
+                                onChange={onChangeStatusTask}
+                            />
+                            <EditableSpan value={tasks.title} onChange={onChangeTaskTitle}/>
+                        </div>
+                        <IconButton onClick={onClickButtonHandler}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    </ListItem>
                 )
             })}
-        </ul>
+        </List>
 
 
     return (
-        <>
-            {tasksList}
-        </>
+        <Box sx={containerSx}>{tasksList}</Box>
     )
 }

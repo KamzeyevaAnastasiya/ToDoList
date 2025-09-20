@@ -1,4 +1,4 @@
-import {Button} from './Button'
+import Button from '@mui/material/Button';
 import {FilterValues} from '../App.tsx';
 
 
@@ -17,12 +17,10 @@ export const FilterButtons = ({todolistId, filter, changeTodolistFilter}: Button
 
     return (
         <div>
-            <Button className={filter === 'All' ? 'active-filter' : ''} title={'All'}
-                    onClickHandler={() => changeFilterHandler('All')}/>
-            <Button className={filter === 'Active' ? 'active-filter' : ''} title={'Active'}
-                    onClickHandler={() => changeFilterHandler('Active')}/>
-            <Button className={filter === 'Completed' ? 'active-filter' : ''} title={'Completed'}
-                    onClickHandler={() => changeFilterHandler('Completed')}/>
+            <Button variant={filter === 'All' ? 'outlined' : 'text'} color={'inherit'} onClick={() => changeFilterHandler('All')}>All</Button>
+            <Button variant={filter === 'Active' ? 'outlined' : 'text'} color={'primary'} onClick={() => changeFilterHandler('Active')}>Active</Button>
+            <Button variant={filter === 'Completed' ? 'outlined' : 'text'} color={'secondary'} onClick={() => changeFilterHandler('Completed')}>Completed</Button>
+
         </div>
     )
 }

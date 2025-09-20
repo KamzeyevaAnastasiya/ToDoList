@@ -1,4 +1,5 @@
-import {Button} from './Button.tsx';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {EditableSpan} from './EditableSpan.tsx';
 
 type TodolistTitleProps = {
@@ -24,7 +25,9 @@ export const TodolistTitle = ({todolistId, title, deleteTodolist, changeTodolist
             <h3>
                 <EditableSpan value={title} onChange={onChangeTodolistTitleHandler}/>
             </h3>
-            <Button title={'x'} onClickHandler={deleteTodolistHandler}/>
+            <IconButton onClick={deleteTodolistHandler}>
+                <DeleteIcon />
+            </IconButton>
         </div>
 
     )

@@ -33,7 +33,7 @@ export const TodolistItem = ({
                                  changeTodolistTitle,
                              }: TodolistItemProps) => {
 
-    const onCreateTaskHandler = (taskTitle: string) => {
+    const onCreateItemHandler = (taskTitle: string) => {
         createTask(todolistId, taskTitle)
     }
 
@@ -44,7 +44,7 @@ export const TodolistItem = ({
                            title={title}
                            deleteTodolist={deleteTodolist}
                            changeTodolistTitle={changeTodolistTitle}/>
-            <AddItemForm onCreateItem={onCreateTaskHandler}/>
+            <AddItemForm createItem={onCreateItemHandler}/>
             <TasksList todolistId={todolistId}
                        tasks={tasks}
                        deleteTask={deleteTask}
