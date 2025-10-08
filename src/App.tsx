@@ -59,23 +59,16 @@ export const App = () => {
     })
 
     const [themeMode, setThemeMode] = useState<ThemeMode>('light')
-
-    const deleteTask = (todolistId: string, taskId: TaskType['id']) => {
-        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== taskId)})
-    }
-
-    const createTask = (todolistId: string, title: string) => {
-        setTasks({
-            ...tasks, [todolistId]: [...tasks[todolistId], {id: v1(), title, isDone: false}]
-        })
+    
+    const createTodolist = (title: string) => {
+        const todolistId = v1()
+        const newTodolist: Todolist = {id: todolistId, title: title, filter: 'All'}
+        setTodolists([...todolists, newTodolist])
+        setTasks({...tasks, [todolistId]: []})
     }
 
     const changeTodolistFilter = (todolistId: string, filter: FilterValues) => {
         setTodolists(todolists.map(todolist => todolist.id === todolistId ? {...todolist, filter} : todolist))
-    }
-
-    const changeStatusTask = (todolistId: string, taskId: string, isDone: boolean) => {
-        setTasks({...tasks, [todolistId]: tasks[todolistId].map(task => task.id === taskId ? {...task, isDone} : task)})
     }
 
     const deleteTodolist = (todolistId: string) => {
@@ -84,11 +77,23 @@ export const App = () => {
         setTasks({...tasks})
     }
 
-    const createTodolist = (title: string) => {
-        const todolistId = v1()
-        const newTodolist: Todolist = {id: todolistId, title: title, filter: 'All'}
-        setTodolists([...todolists, newTodolist])
-        setTasks({...tasks, [todolistId]: []})
+    const changeTodolistTitle = (todolistId: string, title: string) => {
+        setTodolists(todolists.map(todolist => todolistId === todolist.id ? {...todolist, title: title} : todolist))
+    }
+
+
+    const createTask = (todolistId: string, title: string) => {
+        setTasks({
+            ...tasks, [todolistId]: [...tasks[todolistId], {id: v1(), title, isDone: false}]
+        })
+    }
+
+    const changeStatusTask = (todolistId: string, taskId: string, isDone: boolean) => {
+        setTasks({...tasks, [todolistId]: tasks[todolistId].map(task => task.id === taskId ? {...task, isDone} : task)})
+    }
+
+    const deleteTask = (todolistId: string, taskId: TaskType['id']) => {
+        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== taskId)})
     }
 
     const changeTaskTitle = (todolistId: string, title: string, taskId: TaskType['id']) => {
@@ -96,10 +101,6 @@ export const App = () => {
             ...tasks,
             [todolistId]: [...tasks[todolistId].map(task => taskId === task.id ? {...task, title: title} : task)]
         })
-    }
-
-    const changeTodolistTitle = (todolistId: string, title: string) => {
-        setTodolists(todolists.map(todolist => todolistId === todolist.id ? {...todolist, title: title} : todolist))
     }
 
 
@@ -134,6 +135,7 @@ export const App = () => {
         )
     })
 
+
     const theme = createTheme({
         palette: {
             mode: themeMode,
@@ -146,6 +148,7 @@ export const App = () => {
     const changeMode = () => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light')
     }
+
 
     return (
         <div className="app">
@@ -161,7 +164,7 @@ export const App = () => {
                                 <NavButton>Sign in</NavButton>
                                 <NavButton>Sign out</NavButton>
                                 <NavButton background={theme.palette.primary.dark}>FAQ</NavButton>
-                                <Switch color={'default'} onChange={changeMode} />
+                                <Switch color={'default'} onChange={changeMode}/>
                             </div>
                         </Container>
                     </Toolbar>
