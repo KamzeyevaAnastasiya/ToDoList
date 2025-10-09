@@ -9,9 +9,11 @@ import {
     todolistsReducer
 } from './todolists-reducer'
 
+
 let todolistId1: string
 let todolistId2: string
 let startState: Todolist[] = []
+
 
 beforeEach( () => {
     todolistId1 = v1()
@@ -22,6 +24,15 @@ beforeEach( () => {
     ]
 } )
 
+
+test('correct todolist should be created', () => {
+    const title = 'New todolist'
+    const endState = todolistsReducer(startState, createTodolistAC(title))
+
+    expect(endState.length).toBe(3)
+    expect(endState[2].title).toBe(title)
+})
+
 test('correct todolist should be deleted', () => {
     // 1. Стартовый state
     // 2. Действие
@@ -31,14 +42,6 @@ test('correct todolist should be deleted', () => {
     expect(endState.length).toBe(1)
     // удалится нужный тудулист, не любой
     expect(endState[0].id).toBe(todolistId2)
-})
-
-test('correct todolist should be created', () => {
-    const title = 'New todolist'
-    const endState = todolistsReducer(startState, createTodolistAC(title))
-
-    expect(endState.length).toBe(3)
-    expect(endState[2].title).toBe(title)
 })
 
 test('correct todolist should change its title', () => {
