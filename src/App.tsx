@@ -21,6 +21,7 @@ import {
     deleteTodolistAC,
     todolistsReducer
 } from "./model/todolists-reducer.ts";
+import {tasksReducer} from "./model/tasks-reducer.ts";
 
 
 export type FilterValues = 'All' | 'Active' | 'Completed'
@@ -52,7 +53,7 @@ export const App = () => {
         {id: todolistId2, title: 'What to buy', filter: 'All'},
     ])
 
-    const [tasks, setTasks] = useState<TasksState>({
+    const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
         [todolistId1]: [
             {id: v1(), title: 'HTML&CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
@@ -69,14 +70,13 @@ export const App = () => {
     const createTodolist = (title: string) => {
         const action = createTodolistAC(title)
         dispatchToTodolists(action)
-        setTasks({...tasks, [action.payload.id]: []})
+        dispatchToTasks(createTodolistAC(title))
     }
 
     const deleteTodolist = (todolistId: string) => {
         const action = deleteTodolistAC(todolistId)
         dispatchToTodolists(action)
-        delete tasks[action.payload.id]
-        setTasks({...tasks})
+        dispatchToTasks(deleteTodolistAC(todolistId))
     }
 
     const changeTodolistTitle = (todolistId: string, title: string) => {
