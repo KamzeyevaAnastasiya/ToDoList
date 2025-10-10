@@ -4,7 +4,7 @@ import {CreateTodolistAction, DeleteTodolistAction} from "./todolists-reducer.ts
 
 const initialState: TasksState = {}
 
-type Actions = CreateTodolistAction | DeleteTodolistAction | CreateTaskAction | DeleteTaskAction | ChangeTaskStatusAction
+type Actions = CreateTodolistAction | DeleteTodolistAction | CreateTaskAction | DeleteTaskAction | ChangeTaskStatusAction | ChangeTaskTitleAction
 
 export const createTaskAC = ({todolistId, title}:  {todolistId: string, title: string}) => {
     return {type: 'task/createTask', payload: {todolistId, title}} as const
@@ -20,6 +20,11 @@ export const changeTaskStatusAC = ({todolistId, taskId, isDone}:  {todolistId: s
     return {type: 'task/changeTaskStatus', payload: {todolistId, taskId, isDone}} as const
 }
 export type ChangeTaskStatusAction = ReturnType<typeof changeTaskStatusAC>
+
+export const changeTaskTitleAC = ({todolistId, taskId, title}:  {todolistId: string, taskId: string, title: string}) => {
+    return {type: 'task/changeTaskTitle', payload: {todolistId, taskId, title}} as const
+}
+export type ChangeTaskTitleAction = ReturnType<typeof changeTaskTitleAC>
 
 
 
@@ -43,7 +48,10 @@ export const tasksReducer = (state: TasksState = initialState, action: Actions):
         case 'task/changeTaskStatus': {
             return {...state, [action.payload.todolistId]: state[action.payload.todolistId].map(task => task.id === action.payload.taskId ? {...task, isDone: action.payload.isDone} : task)}
         }
-
+        case 'task/changeTaskTitle': {
+            return {...state,
+                [action.payload.todolistId]: [...state[action.payload.todolistId].map(task => action.payload.taskId === task.id ? {...task, title: action.payload.title} : task)]}
+        }
         default:
             return state
     }
