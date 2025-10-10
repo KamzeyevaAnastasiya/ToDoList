@@ -21,7 +21,7 @@ import {
     deleteTodolistAC,
     todolistsReducer
 } from "./model/todolists-reducer.ts";
-import {tasksReducer} from "./model/tasks-reducer.ts";
+import {deleteTaskAC, tasksReducer} from "./model/tasks-reducer.ts";
 
 
 export type FilterValues = 'All' | 'Active' | 'Completed'
@@ -97,7 +97,7 @@ export const App = () => {
     }
 
     const deleteTask = (todolistId: string, taskId: TaskType['id']) => {
-        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== taskId)})
+        dispatchToTasks(deleteTaskAC({id: todolistId, taskId}))
     }
 
     const changeStatusTask = (todolistId: string, taskId: string, isDone: boolean) => {
