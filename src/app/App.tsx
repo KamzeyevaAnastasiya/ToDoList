@@ -1,8 +1,8 @@
 import './App.css'
-import {TodolistItem} from './components/TodolistItem'
+import {TodolistItem} from '../components/TodolistItem.tsx'
 import {useReducer, useState} from 'react';
 import {v1} from 'uuid';
-import {AddItemForm} from './components/AddItemForm.tsx';
+import {AddItemForm} from '../components/AddItemForm.tsx';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -10,8 +10,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper'
-import {containerSx} from './components/TasksList.styles.ts';
-import {NavButton} from './components/NavButton.ts';
+import {containerSx} from '../components/TasksList.styles.ts';
+import {NavButton} from '../components/NavButton.ts';
 import {createTheme, ThemeProvider} from '@mui/material/styles'
 import Switch from '@mui/material/Switch'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -20,14 +20,14 @@ import {
     createTodolistAC,
     deleteTodolistAC,
     todolistsReducer
-} from "./model/todolists-reducer.ts";
+} from "../model/todolists-reducer.ts";
 import {
     changeTaskStatusAC,
     changeTaskTitleAC,
     createTaskAC,
     deleteTaskAC,
     tasksReducer
-} from "./model/tasks-reducer.ts";
+} from "../model/tasks-reducer.ts";
 
 
 export type FilterValues = 'All' | 'Active' | 'Completed'

@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import {FilterValues} from '../App.tsx';
+import {FilterValues} from '../app/App.tsx';
 
 
 type ButtonType = {

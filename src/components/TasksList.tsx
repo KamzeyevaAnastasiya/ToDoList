@@ -1,4 +1,4 @@
-import {TaskType} from '../App'
+import {TaskType} from '../app/App.tsx'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {ChangeEvent} from 'react';
