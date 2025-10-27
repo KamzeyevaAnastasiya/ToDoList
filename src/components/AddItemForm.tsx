@@ -14,7 +14,9 @@ export const AddItemForm = ({createItem}: AddItemFormType) => {
     const [error, setError] = useState<string | null>(null)
 
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error !== null) {
+            setError(null)
+        }
         setItemTitle(event.currentTarget.value)
     }
     const onButtonClickHandler = () => {
