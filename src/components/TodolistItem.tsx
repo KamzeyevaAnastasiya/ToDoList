@@ -3,6 +3,8 @@ import {AddItemForm} from './AddItemForm.tsx'
 import {TasksList} from './TasksList.tsx'
 import {FilterButtons} from './FilterButtons.tsx'
 import {FilterValues, TaskType} from '../app/App.tsx'
+import {useCallback, useMemo} from "react";
+import * as React from "react";
 
 type TodolistItemProps = {
     todolistId: string
@@ -19,24 +21,36 @@ type TodolistItemProps = {
 }
 
 
-export const TodolistItem = ({
-                                 todolistId,
-                                 title,
-                                 filter,
-                                 tasks,
-                                 deleteTask,
-                                 changeTodolistFilter,
-                                 createTask,
-                                 changeStatusTask,
-                                 deleteTodolist,
-                                 changeTaskTitle,
-                                 changeTodolistTitle,
-                             }: TodolistItemProps) => {
+export const TodolistItem = React.memo(({
+                                            todolistId,
+                                            title,
+                                            filter,
+                                            tasks,
+                                            deleteTask,
+                                            changeTodolistFilter,
+                                            createTask,
+                                            changeStatusTask,
+                                            deleteTodolist,
+                                            changeTaskTitle,
+                                            changeTodolistTitle,
+                                        }: TodolistItemProps) => {
 
-    const onCreateItemHandler = (taskTitle: string) => {
+    const onCreateItemHandler = useCallback((taskTitle: string) => {
         createTask(todolistId, taskTitle)
-    }
+    }, [])
 
+    const filteredTasks = useMemo(() => {
+        let tasksForTodolist = tasks
+
+        if (filter === 'Active') {
+            tasksForTodolist = tasks.filter(t => !t.isDone)
+        }
+        if (filter === 'Completed') {
+            tasksForTodolist = tasks.filter(t => t.isDone)
+        }
+
+        return tasksForTodolist
+    }, [tasks, filter])
 
     return (
         <div>
@@ -46,7 +60,7 @@ export const TodolistItem = ({
                            changeTodolistTitle={changeTodolistTitle}/>
             <AddItemForm createItem={onCreateItemHandler}/>
             <TasksList todolistId={todolistId}
-                       tasks={tasks}
+                       tasks={filteredTasks}
                        deleteTask={deleteTask}
                        changeStatusTask={changeStatusTask}
                        changeTaskTitle={changeTaskTitle}/>
@@ -55,4 +69,4 @@ export const TodolistItem = ({
                            changeTodolistFilter={changeTodolistFilter}/>
         </div>
     )
-}
+})
