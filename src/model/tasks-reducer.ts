@@ -56,8 +56,9 @@ export const tasksReducer = createReducer(initialState, (builder) => {
             }
         })
         .addCase(changeTaskTitleAC, (state, action) => {
-            const task = state[action.payload.todolistId].find(task => task.id === action.payload.taskId)
-            if (state) {
+            const tasks = state[action.payload.todolistId]
+            if (tasks) {
+                const task = tasks.find(task => task.id === action.payload.taskId)
                 if (task) {
                     task.title = action.payload.title
                 }

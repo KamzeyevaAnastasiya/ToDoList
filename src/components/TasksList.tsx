@@ -1,13 +1,9 @@
 import {TaskType} from '../app/App.tsx'
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import {ChangeEvent} from 'react';
-import {EditableSpan} from './EditableSpan.tsx';
-import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
 import Box from '@mui/material/Box'
-import {containerSx, listItemSx} from './TasksList.styles.ts';
+import {containerSx} from './TasksList.styles.ts';
+import {Task} from "./Task.tsx";
+import * as React from "react";
 
 
 type TasksListProps = {
@@ -19,44 +15,19 @@ type TasksListProps = {
 }
 
 
-export const TasksList = ({todolistId, tasks, deleteTask, changeStatusTask, changeTaskTitle}: TasksListProps) => {
+export const TasksList = React.memo(({todolistId, tasks, deleteTask, changeStatusTask, changeTaskTitle}: TasksListProps) => {
 
     const tasksList = tasks.length === 0
         ? <span>Ваш список пуст</span>
         : <List>
-            {tasks.map(tasks => {
-                const onClickButtonHandler = () => {
-                    deleteTask(todolistId, tasks.id)
-                }
-
-                const onChangeStatusTask = (event: ChangeEvent<HTMLInputElement>) => {
-                    changeStatusTask(todolistId, tasks.id, event.currentTarget.checked)
-                }
-
-                const onChangeTaskTitle = (title: string) => {
-                    changeTaskTitle(todolistId, title, tasks.id)
-                }
-
-                return (
-                    <ListItem key={tasks.id}
-                              sx={listItemSx(tasks.isDone)}>
-                        <div>
-                            <Checkbox
-                                checked={tasks.isDone}
-                                onChange={onChangeStatusTask}
-                            />
-                            <EditableSpan value={tasks.title} onChange={onChangeTaskTitle}/>
-                        </div>
-                        <IconButton onClick={onClickButtonHandler}>
-                            <DeleteIcon/>
-                        </IconButton>
-                    </ListItem>
-                )
-            })}
+            {tasks.map(t =>
+                <Task todolistId={todolistId} task={t} deleteTask={deleteTask} changeStatusTask={changeStatusTask}
+                      changeTaskTitle={changeTaskTitle} key={t.id}/>
+            )}
         </List>
 
 
     return (
         <Box sx={containerSx}>{tasksList}</Box>
     )
-}
+})

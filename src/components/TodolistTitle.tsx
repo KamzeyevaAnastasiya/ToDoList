@@ -1,6 +1,8 @@
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {EditableSpan} from './EditableSpan.tsx';
+import {useCallback} from "react";
+import * as React from "react";
 
 type TodolistTitleProps = {
     todolistId: string
@@ -10,14 +12,14 @@ type TodolistTitleProps = {
 }
 
 
-export const TodolistTitle = ({todolistId, title, deleteTodolist, changeTodolistTitle}: TodolistTitleProps) => {
-    const deleteTodolistHandler = () => {
+export const TodolistTitle = React.memo(({todolistId, title, deleteTodolist, changeTodolistTitle}: TodolistTitleProps) => {
+    const deleteTodolistHandler = useCallback(() => {
         deleteTodolist(todolistId)
-    }
+    }, [todolistId])
 
-    const onChangeTodolistTitleHandler = () => {
-        changeTodolistTitle(todolistId, title)
-    }
+    const onChangeTodolistTitleHandler = useCallback((newTitle: string) => {
+        changeTodolistTitle(todolistId, newTitle)
+    }, [todolistId])
 
 
     return (
@@ -31,4 +33,4 @@ export const TodolistTitle = ({todolistId, title, deleteTodolist, changeTodolist
         </div>
 
     )
-}
+})

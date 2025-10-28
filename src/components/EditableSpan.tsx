@@ -1,5 +1,6 @@
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, useCallback, useState} from 'react';
 import TextField from '@mui/material/TextField';
+import * as React from "react";
 
 
 export type Props = {
@@ -8,18 +9,19 @@ export type Props = {
 }
 
 
-export const EditableSpan = ({value, onChange}: Props) => {
+export const EditableSpan = React.memo(({value, onChange}: Props) => {
     const [isEditMode, setIsEditMode] = useState<boolean>(false)
     const [title, setTitle] = useState(value)
 
+
     const onEditMode = () => {
-        setIsEditMode(!isEditMode)
+        setIsEditMode(true)
     }
 
-    const offEditMode = () => {
-        setIsEditMode(!isEditMode)
+    const offEditMode = useCallback(() => {
+        setIsEditMode(false)
         onChange(title)
-    }
+    }, [value])
 
     const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.currentTarget.value)
@@ -34,8 +36,8 @@ export const EditableSpan = ({value, onChange}: Props) => {
                               size={'small'}
                               onChange={changeTitle}
                               onBlur={offEditMode} autoFocus/>)
-                : (<span onDoubleClick={onEditMode}>{title}</span>)}
+                : (<span onDoubleClick={onEditMode}>{value}</span>)}
         </>
 
     );
-};
+})

@@ -1,5 +1,7 @@
 import Button from '@mui/material/Button';
 import {FilterValues} from '../app/App.tsx';
+import * as React from "react";
+import {useCallback} from "react";
 
 
 type ButtonType = {
@@ -9,10 +11,10 @@ type ButtonType = {
 }
 
 
-export const FilterButtons = ({todolistId, filter, changeTodolistFilter}: ButtonType) => {
-    const changeFilterHandler = (filter: FilterValues) => {
+export const FilterButtons = React.memo(({todolistId, filter, changeTodolistFilter}: ButtonType) => {
+    const changeFilterHandler = useCallback((filter: FilterValues) => {
         changeTodolistFilter(todolistId, filter)
-    }
+    }, [todolistId])
 
 
     return (
@@ -23,4 +25,4 @@ export const FilterButtons = ({todolistId, filter, changeTodolistFilter}: Button
 
         </div>
     )
-}
+})

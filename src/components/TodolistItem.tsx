@@ -37,7 +37,7 @@ export const TodolistItem = React.memo(({
 
     const onCreateItemHandler = useCallback((taskTitle: string) => {
         createTask(todolistId, taskTitle)
-    }, [])
+    }, [createTask, todolistId])
 
     const filteredTasks = useMemo(() => {
         let tasksForTodolist = tasks

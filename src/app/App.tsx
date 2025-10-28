@@ -1,6 +1,6 @@
 import './App.css'
 import {TodolistItem} from '../components/TodolistItem.tsx'
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {AddItemForm} from '../components/AddItemForm.tsx';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -61,69 +61,70 @@ export const App = () => {
 
     const createTodolist = useCallback((title: string) => {
         dispatch(createTodolistAC(title))
-    }, [])
+    }, [dispatch])
 
     const deleteTodolist = useCallback((todolistId: string) => {
         dispatch(deleteTodolistAC({id: todolistId}))
-    }, [])
+    }, [dispatch])
 
     const changeTodolistTitle = useCallback((todolistId: string, title: string) => {
         dispatch(changeTodolistTitleAC({id: todolistId, title}))
-    }, [])
+    }, [dispatch])
 
     const changeTodolistFilter = useCallback((todolistId: string, filter: FilterValues) => {
         dispatch(changeTodolistFilterAC({id: todolistId, filter}))
-    }, [])
+    }, [dispatch])
 
 
     const createTask = useCallback((todolistId: string, title: string) => {
         dispatch(createTaskAC(todolistId, title))
-    }, [])
+    }, [dispatch])
 
     const deleteTask = useCallback((todolistId: string, taskId: TaskType['id']) => {
         dispatch(deleteTaskAC({todolistId, taskId}))
-    }, [])
+    }, [dispatch])
 
     const changeStatusTask = useCallback((todolistId: string, taskId: string, isDone: boolean) => {
         dispatch(changeTaskStatusAC({todolistId, taskId, isDone}))
-    }, [])
+    }, [dispatch])
 
     const changeTaskTitle = useCallback((todolistId: string, title: string, taskId: TaskType['id']) => {
         dispatch(changeTaskTitleAC({todolistId, title, taskId}))
-    }, [])
+    }, [dispatch])
 
 
-    const todolistComponents = todolists && todolists.map(todolist => {
-        return (
-            <Grid key={todolist.id}>
-                <Paper sx={{p: '0 20px 20px 20px'}}>
-                    <TodolistItem
-                        todolistId={todolist.id}
-                        title={todolist.title}
-                        filter={todolist.filter}
-                        tasks={tasks[todolist.id]}
-                        deleteTask={deleteTask}
-                        changeTodolistFilter={changeTodolistFilter}
-                        createTask={createTask}
-                        changeStatusTask={changeStatusTask}
-                        deleteTodolist={deleteTodolist}
-                        changeTaskTitle={changeTaskTitle}
-                        changeTodolistTitle={changeTodolistTitle}
-                    />
-                </Paper>
-            </Grid>
-        )
-    })
+    const todolistComponents = useMemo(() =>
+        todolists && todolists.map(todolist => {
+            return (
+                <Grid key={todolist.id}>
+                    <Paper sx={{p: '0 20px 20px 20px'}}>
+                        <TodolistItem
+                            todolistId={todolist.id}
+                            title={todolist.title}
+                            filter={todolist.filter}
+                            tasks={tasks[todolist.id]}
+                            deleteTask={deleteTask}
+                            changeTodolistFilter={changeTodolistFilter}
+                            createTask={createTask}
+                            changeStatusTask={changeStatusTask}
+                            deleteTodolist={deleteTodolist}
+                            changeTaskTitle={changeTaskTitle}
+                            changeTodolistTitle={changeTodolistTitle}
+                        />
+                    </Paper>
+                </Grid>
+            )
+        }), [todolists, tasks])
 
 
-    const theme = createTheme({
+    const theme = useMemo(() => createTheme({
         palette: {
             mode: themeMode,
             primary: {
                 main: 'rgb(120,168,133)'
             }
         }
-    })
+    }), [themeMode])
 
     const changeMode = () => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light')
