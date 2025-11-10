@@ -2,15 +2,14 @@ import {ChangeEvent, KeyboardEvent, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import IconButton from '@mui/material/IconButton'
-import * as React from "react";
 
 
-type AddItemFormType = {
+type Props = {
     createItem: (taskTitle: string) => void
 }
 
 
-export const AddItemForm = React.memo(({createItem}: AddItemFormType) => {
+export const AddItemForm = ({createItem}: Props) => {
     const [itemTitle, setItemTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
@@ -55,4 +54,4 @@ export const AddItemForm = React.memo(({createItem}: AddItemFormType) => {
 
         </div>
     )
-})
+}
