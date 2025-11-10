@@ -1,6 +1,6 @@
 import './App.css'
 import {TodolistItem} from '../components/TodolistItem.tsx'
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useMemo} from 'react';
 import {AddItemForm} from '../components/AddItemForm.tsx';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper'
 import {containerSx} from '../components/TasksList.styles.ts';
 import {NavButton} from '../components/NavButton.ts';
-import {createTheme, ThemeProvider} from '@mui/material/styles'
+import {ThemeProvider} from '@mui/material/styles'
 import Switch from '@mui/material/Switch'
 import CssBaseline from '@mui/material/CssBaseline'
 import {
@@ -29,6 +29,9 @@ import {useAppDispatch} from "../common/hooks/useAppDispatch.ts";
 import {useAppSelector} from "../common/hooks/useAppSelector.ts";
 import {selectTasks} from "../model/tasks-selectors.ts";
 import {selectTodolists} from "../model/todolists-selectors.ts";
+import {selectThemeMode} from "./app-selectors.ts";
+import {changeThemeModeAC} from "./app-reducer.ts";
+import {getTheme} from "../common/theme/theme.ts";
 
 
 export type FilterValues = 'All' | 'Active' | 'Completed'
@@ -49,15 +52,16 @@ export type TasksState = {
     [todolistId: string]: TaskType []
 }
 
-type ThemeMode = 'dark' | 'light'
 
 export const App = () => {
 
     const todolists = useAppSelector(selectTodolists)
     const tasks = useAppSelector(selectTasks)
+    const themeMode = useAppSelector(selectThemeMode)
+
     const dispatch = useAppDispatch()
 
-    const [themeMode, setThemeMode] = useState<ThemeMode>('light')
+    const theme = getTheme(themeMode)
 
     const createTodolist = useCallback((title: string) => {
         dispatch(createTodolistAC(title))
@@ -117,17 +121,8 @@ export const App = () => {
         }), [todolists, tasks])
 
 
-    const theme = useMemo(() => createTheme({
-        palette: {
-            mode: themeMode,
-            primary: {
-                main: 'rgb(120,168,133)'
-            }
-        }
-    }), [themeMode])
-
     const changeMode = () => {
-        setThemeMode(themeMode === 'light' ? 'dark' : 'light')
+        dispatch(changeThemeModeAC({themeMode: themeMode === 'light' ? 'dark' : 'light'}))
     }
 
 
