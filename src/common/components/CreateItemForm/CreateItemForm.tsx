@@ -5,11 +5,11 @@ import IconButton from '@mui/material/IconButton'
 
 
 type Props = {
-    createItem: (taskTitle: string) => void
+    onCreateItem: (taskTitle: string) => void
 }
 
 
-export const AddItemForm = ({createItem}: Props) => {
+export const CreateItemForm = ({onCreateItem}: Props) => {
     const [itemTitle, setItemTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
@@ -21,7 +21,7 @@ export const AddItemForm = ({createItem}: Props) => {
     }
     const onButtonClickHandler = () => {
         if (itemTitle.trim()) {
-            createItem(itemTitle.trim())
+            onCreateItem(itemTitle.trim())
             setItemTitle('')
         } else {
             setError('Title is required')

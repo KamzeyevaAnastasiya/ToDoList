@@ -1,5 +1,5 @@
 import {TodolistTitle} from '@/features/todolists/ui/Todolists/TodolistItem/TodolistTitle/TodolistTitle.tsx'
-import {AddItemForm} from '@/common/components/AddItemForm/AddItemForm.tsx'
+import {CreateItemForm} from '@/common/components/CreateItemForm/CreateItemForm.tsx'
 import {Tasks} from '@/features/todolists/ui/Todolists/TodolistItem/Tasks/Tasks.tsx'
 import {FilterButtons} from '@/features/todolists/ui/Todolists/TodolistItem/FilterButtons/FilterButtons.tsx'
 import {Todolist} from '@/app/App.tsx'
@@ -22,7 +22,7 @@ export const TodolistItem = ({todolist}: Props) => {
     return (
         <div>
             <TodolistTitle todolist={todolist}/>
-            <AddItemForm createItem={createTask}/>
+            <CreateItemForm createItem={createTask}/>
             <Tasks todolist={todolist}/>
             <FilterButtons todolist={todolist}/>
         </div>
