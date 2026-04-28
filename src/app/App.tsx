@@ -1,10 +1,10 @@
 import './App.css'
+import {Header} from "@/common/components";
 import {ThemeProvider} from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
-import {useAppSelector} from "../common/hooks/useAppSelector.ts";
+import {useAppSelector} from "@/common/hooks/useAppSelector";
 import {selectThemeMode} from "./app-selectors.ts";
-import {getTheme} from "../common/theme/theme.ts";
-import {Header} from "@/common/components/Header/Header.tsx";
+import {getTheme} from "@/common/theme";
 import {Main} from "@/app/Main.tsx";
 
 

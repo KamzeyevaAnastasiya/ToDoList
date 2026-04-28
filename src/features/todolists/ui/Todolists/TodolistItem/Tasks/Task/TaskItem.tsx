@@ -1,12 +1,12 @@
+import {EditableSpan} from "@/common/components";
+import {useAppDispatch} from "@/common/hooks";
 import {ChangeEvent} from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {EditableSpan} from '@/common/components/EditableSpan/EditableSpan.tsx';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem'
 import {TaskType} from "@/app/App.tsx";
 import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC} from "@/features/todolists/model/tasks-reducer.ts";
-import {useAppDispatch} from "@/common/hooks/useAppDispatch.ts";
 import {getListItemSx} from "@/features/todolists/ui/Todolists/TodolistItem/Tasks/Task/TaskItem.styles.ts";
 
 

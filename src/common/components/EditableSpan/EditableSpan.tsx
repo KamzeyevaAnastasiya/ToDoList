@@ -1,4 +1,4 @@
-import {ChangeEvent, useCallback, useState} from 'react';
+import {ChangeEvent, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import * as React from "react";
 
@@ -18,10 +18,10 @@ export const EditableSpan = React.memo(({value, onChange}: Props) => {
         setIsEditMode(true)
     }
 
-    const offEditMode = useCallback(() => {
+    const offEditMode = () => {
         setIsEditMode(false)
         onChange(title)
-    }, [value])
+    }
 
     const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.currentTarget.value)
