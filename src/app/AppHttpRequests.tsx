@@ -1,10 +1,11 @@
 import type { Todolist } from '@/app/App'
 import { CreateItemForm, EditableSpan } from '@/common/components'
+import { TaskStatus } from '@/common/enums'
 import { tasksApi } from '@/features/todolists/api/tasksApi'
 import type { DomainTask, UpdateTaskModel } from '@/features/todolists/api/tasksApi.types'
 import { todolistsApi } from '@/features/todolists/api/todolistsApi'
-import { type ChangeEvent, type CSSProperties, useEffect, useState } from 'react'
 import Checkbox from '@mui/material/Checkbox'
+import { type ChangeEvent, type CSSProperties, useEffect, useState } from 'react'
 
 export const AppHttpRequests = () => {
   const [todolists, setTodolists] = useState<Todolist[]>([])
@@ -57,7 +58,7 @@ export const AppHttpRequests = () => {
     const model: UpdateTaskModel = {
       description: task.description,
       title: task.title,
-      status: e.currentTarget.checked ? 2 : 0,
+      status: e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New,
       priority: task.priority,
       startDate: task.startDate,
       deadline: task.deadline,
@@ -100,7 +101,7 @@ export const AppHttpRequests = () => {
           <CreateItemForm onCreateItem={(title) => createTask(todolist.id, title)} />
           {tasks[todolist.id]?.map((task) => (
             <div key={task.id}>
-              <Checkbox checked={task.status === 2} onChange={(e) => changeTaskStatus(e, task)} />
+              <Checkbox checked={task.status === TaskStatus.Completed} onChange={(e) => changeTaskStatus(e, task)} />
               <EditableSpan value={task.title} onChange={(title) => changeTaskTitle(task, title)} />
               <button onClick={() => deleteTask(todolist.id, task.id)}>x</button>
             </div>
