@@ -6,6 +6,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 export const todolistsSlice = createSlice({
   name: 'todolists',
   initialState: [] as DomainTodolist[],
+  selectors: {
+    selectTodolists: (state) => state,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTodolistsTC.fulfilled, (_state, action) => {
@@ -84,6 +87,7 @@ export const changeTodolistTitleTC = createAsyncThunk(
   },
 )
 
+export const { selectTodolists } = todolistsSlice.selectors
 export const { changeTodolistFilterAC } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
 

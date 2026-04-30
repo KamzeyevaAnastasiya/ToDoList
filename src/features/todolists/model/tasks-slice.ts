@@ -5,6 +5,9 @@ import { createSlice, nanoid } from '@reduxjs/toolkit'
 export const tasksSlice = createSlice({
   name: 'tasks',
   initialState: {} as TasksState,
+  selectors: {
+    selectTasks: (state) => state,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createTodolistTC.fulfilled, (state, action) => {
@@ -51,5 +54,6 @@ export const tasksSlice = createSlice({
   }),
 })
 
+export const { selectTasks } = tasksSlice.selectors
 export const { createTaskAC, deleteTaskAC, changeTaskStatusAC, changeTaskTitleAC } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
