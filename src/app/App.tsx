@@ -1,9 +1,9 @@
 import './App.css'
+import { selectThemeMode } from '@/app/app-slice'
 import { Header } from '@/common/components'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { useAppSelector } from '@/common/hooks/useAppSelector'
-import { selectThemeMode } from './app-selectors.ts'
 import { getTheme } from '@/common/theme'
 import { Main } from '@/app/Main.tsx'
 

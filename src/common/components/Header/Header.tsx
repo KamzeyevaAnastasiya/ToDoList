@@ -8,8 +8,7 @@ import AppBar from '@mui/material/AppBar'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import Switch from '@mui/material/Switch'
-import { changeThemeModeAC } from '@/app/app-slice.ts'
-import { selectThemeMode } from '@/app/app-selectors.ts'
+import { changeThemeModeAC, selectThemeMode } from '@/app/app-slice.ts'
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
