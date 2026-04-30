@@ -1,7 +1,7 @@
 import { FilterValues } from '@/app/App'
 import { todolistsApi } from '@/features/todolists/api/todolistsApi'
 import type { Todolist } from '@/features/todolists/api/todolistsApi.types'
-import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const todolistsSlice = createSlice({
   name: 'todolists',
@@ -20,14 +20,11 @@ export const todolistsSlice = createSlice({
           state[index].title = action.payload.title
         }
       })
+      .addCase(createTodolistTC.fulfilled, (state, action) => {
+        state.unshift({ ...action.payload, filter: 'All' })
+      })
   },
   reducers: (create) => ({
-    createTodolistAC: create.preparedReducer(
-      (title: string) => ({ payload: { title, id: nanoid() } }),
-      (state, action) => {
-        state.push({ ...action.payload, filter: 'All', addedDate: '', order: 0 })
-      },
-    ),
     deleteTodolistAC: create.reducer<{ id: string }>((state, action) => {
       const index = state.findIndex((todolist) => todolist.id === action.payload.id)
       if (index !== -1) {
@@ -52,6 +49,18 @@ export const fetchTodolistsTC = createAsyncThunk(`${todolistsSlice.name}/fetchTo
   }
 })
 
+export const createTodolistTC = createAsyncThunk(
+  `${todolistsSlice.name}/createTodolistTC`,
+  async (payload: { title: string }, thunkAPI) => {
+    try {
+      const res = await todolistsApi.createTodolist(payload.title)
+      return res.data.data.item
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 export const changeTodolistTitleTC = createAsyncThunk(
   `${todolistsSlice.name}/changeTodolistTitleTC`,
   async (payload: { id: string; title: string }, thunkAPI) => {
@@ -64,7 +73,7 @@ export const changeTodolistTitleTC = createAsyncThunk(
   },
 )
 
-export const { createTodolistAC, deleteTodolistAC, changeTodolistFilterAC } = todolistsSlice.actions
+export const { deleteTodolistAC, changeTodolistFilterAC } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
 
 export type DomainTodolist = Todolist & {
