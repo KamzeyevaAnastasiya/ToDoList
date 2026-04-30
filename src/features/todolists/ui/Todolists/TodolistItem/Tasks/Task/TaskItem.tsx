@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import Checkbox from '@mui/material/Checkbox'
 import ListItem from '@mui/material/ListItem'
 import { TaskType } from '@/app/App.tsx'
-import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from '@/features/todolists/model/tasks-reducer.ts'
+import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from '@/features/todolists/model/tasks-slice.ts'
 import { getListItemSx } from '@/features/todolists/ui/Todolists/TodolistItem/Tasks/Task/TaskItem.styles.ts'
 
 type Props = {

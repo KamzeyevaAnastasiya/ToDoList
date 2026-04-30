@@ -4,7 +4,7 @@ import { TodolistTitle } from '@/features/todolists/ui/Todolists/TodolistItem/To
 import { Tasks } from '@/features/todolists/ui/Todolists/TodolistItem/Tasks/Tasks.tsx'
 import { FilterButtons } from '@/features/todolists/ui/Todolists/TodolistItem/FilterButtons/FilterButtons.tsx'
 import { Todolist } from '@/app/App.tsx'
-import { createTaskAC } from '@/features/todolists/model/tasks-reducer.ts'
+import { createTaskAC } from '@/features/todolists/model/tasks-slice.ts'
 
 type Props = {
   todolist: Todolist
