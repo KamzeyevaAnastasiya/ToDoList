@@ -2,7 +2,7 @@ import { EditableSpan } from '@/common/components'
 import { useAppDispatch } from '@/common/hooks'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { changeTodolistTitleAC, deleteTodolistAC } from '@/features/todolists/model/todolists-reducer.ts'
+import { changeTodolistTitleAC, deleteTodolistAC } from '@/features/todolists/model/todolists-slice.ts'
 import { Todolist } from '@/app/App.tsx'
 import styles from './TodolistTitle.module.css'
 

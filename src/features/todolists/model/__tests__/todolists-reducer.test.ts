@@ -5,8 +5,8 @@ import {
   changeTodolistTitleAC,
   createTodolistAC,
   deleteTodolistAC,
-  todolistsReducer,
-} from '../todolists-reducer.ts'
+  todolistsSlice,
+} from '../todolists-slice.ts'
 import { nanoid } from '@reduxjs/toolkit'
 
 let todolistId1: string
@@ -24,7 +24,7 @@ beforeEach(() => {
 
 test('correct todolist should be created', () => {
   const title = 'New todolist'
-  const endState = todolistsReducer(startState, createTodolistAC(title))
+  const endState = todolistsSlice(startState, createTodolistAC(title))
 
   expect(endState.length).toBe(3)
   expect(endState[2].title).toBe(title)
@@ -33,7 +33,7 @@ test('correct todolist should be created', () => {
 test('correct todolist should be deleted', () => {
   // 1. Стартовый state
   // 2. Действие
-  const endState = todolistsReducer(startState, deleteTodolistAC({ id: todolistId1 }))
+  const endState = todolistsSlice(startState, deleteTodolistAC({ id: todolistId1 }))
   // 3. Проверка, что действие измененило state соответствующим образом
   // в массиве останется один тудулист
   expect(endState.length).toBe(1)
@@ -43,7 +43,7 @@ test('correct todolist should be deleted', () => {
 
 test('correct todolist should change its title', () => {
   const title = 'New title'
-  const endState = todolistsReducer(startState, changeTodolistTitleAC({ id: todolistId2, title }))
+  const endState = todolistsSlice(startState, changeTodolistTitleAC({ id: todolistId2, title }))
 
   expect(endState[0].title).toBe('What to learn')
   expect(endState[1].title).toBe(title)
@@ -51,7 +51,7 @@ test('correct todolist should change its title', () => {
 
 test('correct todolist should change its filter', () => {
   const filter = 'Completed'
-  const endState = todolistsReducer(startState, changeTodolistFilterAC({ id: todolistId2, filter }))
+  const endState = todolistsSlice(startState, changeTodolistFilterAC({ id: todolistId2, filter }))
 
   expect(endState[0].filter).toBe('All')
   expect(endState[1].filter).toBe(filter)
