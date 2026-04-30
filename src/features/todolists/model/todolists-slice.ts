@@ -23,14 +23,14 @@ export const todolistsSlice = createSlice({
       .addCase(createTodolistTC.fulfilled, (state, action) => {
         state.unshift({ ...action.payload, filter: 'All' })
       })
+      .addCase(deleteTodolistTC.fulfilled, (state, action) => {
+        const index = state.findIndex((todolist) => todolist.id === action.payload.id)
+        if (index !== -1) {
+          state.splice(index, 1)
+        }
+      })
   },
   reducers: (create) => ({
-    deleteTodolistAC: create.reducer<{ id: string }>((state, action) => {
-      const index = state.findIndex((todolist) => todolist.id === action.payload.id)
-      if (index !== -1) {
-        state.splice(index, 1)
-      }
-    }),
     changeTodolistFilterAC: create.reducer<{ id: string; filter: FilterValues }>((state, action) => {
       const todolist = state.find((todolist) => todolist.id === action.payload.id)
       if (todolist) {
@@ -60,6 +60,17 @@ export const createTodolistTC = createAsyncThunk(
     }
   },
 )
+export const deleteTodolistTC = createAsyncThunk(
+  `${todolistsSlice.name}/createTodolistTC`,
+  async (payload: { id: string }, thunkAPI) => {
+    try {
+      await todolistsApi.deleteTodolist(payload.id)
+      return payload
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
 
 export const changeTodolistTitleTC = createAsyncThunk(
   `${todolistsSlice.name}/changeTodolistTitleTC`,
@@ -73,7 +84,7 @@ export const changeTodolistTitleTC = createAsyncThunk(
   },
 )
 
-export const { deleteTodolistAC, changeTodolistFilterAC } = todolistsSlice.actions
+export const { changeTodolistFilterAC } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
 
 export type DomainTodolist = Todolist & {
