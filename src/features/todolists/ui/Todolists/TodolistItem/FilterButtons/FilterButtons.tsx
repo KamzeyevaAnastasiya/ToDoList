@@ -1,12 +1,12 @@
 import { useAppDispatch } from '@/common/hooks'
 import { containerSx } from '@/common/styles'
 import Button from '@mui/material/Button'
-import { FilterValues, Todolist } from '@/app/App.tsx'
-import { changeTodolistFilterAC } from '@/features/todolists/model/todolists-slice.ts'
+import { FilterValues } from '@/app/App.tsx'
+import { changeTodolistFilterAC, type DomainTodolist } from '@/features/todolists/model/todolists-slice.ts'
 import Box from '@mui/material/Box'
 
 type Props = {
-  todolist: Todolist
+  todolist: DomainTodolist
 }
 
 export const FilterButtons = ({ todolist }: Props) => {

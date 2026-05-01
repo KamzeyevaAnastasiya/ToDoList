@@ -1,9 +1,9 @@
-import type { Todolist } from '@/app/App'
 import { CreateItemForm, EditableSpan } from '@/common/components'
 import { TaskStatus } from '@/common/enums'
 import { tasksApi } from '@/features/todolists/api/tasksApi'
 import type { DomainTask, UpdateTaskModel } from '@/features/todolists/api/tasksApi.types'
 import { todolistsApi } from '@/features/todolists/api/todolistsApi'
+import type { Todolist } from '@/features/todolists/api/todolistsApi.types'
 import Checkbox from '@mui/material/Checkbox'
 import { type ChangeEvent, type CSSProperties, useEffect, useState } from 'react'
 

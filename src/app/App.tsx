@@ -1,6 +1,7 @@
 import './App.css'
 import { selectThemeMode } from '@/app/app-slice'
 import { Header } from '@/common/components'
+import type { DomainTask } from '@/features/todolists/api/tasksApi.types'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { useAppSelector } from '@/common/hooks/useAppSelector'
@@ -9,20 +10,8 @@ import { Main } from '@/app/Main.tsx'
 
 export type FilterValues = 'All' | 'Active' | 'Completed'
 
-export type TaskType = {
-  id: string
-  title: string
-  isDone: boolean
-}
-
-export type Todolist = {
-  id: string
-  title: string
-  filter: FilterValues
-}
-
 export type TasksState = {
-  [todolistId: string]: TaskType[]
+  [todolistId: string]: DomainTask[]
 }
 
 export const App = () => {

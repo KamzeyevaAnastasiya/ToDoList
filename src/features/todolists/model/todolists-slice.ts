@@ -68,7 +68,7 @@ export const createTodolistTC = createAsyncThunk(
   },
 )
 export const deleteTodolistTC = createAsyncThunk(
-  `${todolistsSlice.name}/createTodolistTC`,
+  `${todolistsSlice.name}/deleteTodolistTC`,
   async (payload: { id: string }, thunkAPI) => {
     try {
       await todolistsApi.deleteTodolist(payload.id)
