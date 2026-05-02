@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Checkbox from '@mui/material/Checkbox'
 import ListItem from '@mui/material/ListItem'
-import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC } from '@/features/todolists/model/tasks-slice.ts'
+import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskTC } from '@/features/todolists/model/tasks-slice.ts'
 import { getListItemSx } from '@/features/todolists/ui/Todolists/TodolistItem/Tasks/Task/TaskItem.styles.ts'
 
 type Props = {
@@ -19,7 +19,7 @@ export const TaskItem = ({ task, todolistId }: Props) => {
   const dispatch = useAppDispatch()
 
   const deleteTask = () => {
-    dispatch(deleteTaskAC({ todolistId, taskId: task.id }))
+    dispatch(deleteTaskTC({ todolistId, taskId: task.id }))
   }
 
   const changeTaskStatus = (event: ChangeEvent<HTMLInputElement>) => {
