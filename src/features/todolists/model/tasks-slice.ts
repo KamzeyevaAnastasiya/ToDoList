@@ -76,7 +76,7 @@ export const tasksSlice = createAppSlice({
     changeTaskStatusTC: create.asyncThunk(
       async ({ todolistId, taskId, status }: { todolistId: string; taskId: string; status: TaskStatus }, thunkAPI) => {
         const allTodolistTasks = (thunkAPI.getState() as RootState).tasks[todolistId]
-        const task = allTodolistTasks.find((task) => task.id === todolistId)
+        const task = allTodolistTasks.find((task) => task.id === taskId)
 
         if (!task) {
           return thunkAPI.rejectWithValue(null)
