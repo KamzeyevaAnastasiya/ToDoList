@@ -123,9 +123,20 @@ export const tasksSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
           const res = await tasksApi.updateTask({ todolistId, taskId, model })
-          dispatch(setAppStatusAC({ status: 'succeeded' }))
-          return res.data.data.item
-        } catch (error) {
+          if (res.data.resultCode === ResultCode.Success) {
+            dispatch(setAppStatusAC({ status: 'succeeded' }))
+            return res.data.data.item
+          } else {
+            if (res.data.messages.length) {
+              dispatch(setAppErrorAC({ error: res.data.messages[0] }))
+            } else {
+              dispatch(setAppErrorAC({ error: 'Some error occurred' }))
+            }
+            dispatch(setAppStatusAC({ status: 'failed' }))
+            return rejectWithValue(null)
+          }
+        } catch (error: any) {
+          dispatch(setAppErrorAC({ error: error.message }))
           dispatch(setAppStatusAC({ status: 'failed' }))
           return rejectWithValue(null)
         }
