@@ -12,7 +12,7 @@ type Props = {
 }
 
 export const Tasks = ({ todolist }: Props) => {
-  const { id, filter } = todolist
+  const { id, filter, entityStatus } = todolist
 
   const tasks = useAppSelector(selectTasks)
 
@@ -37,7 +37,10 @@ export const Tasks = ({ todolist }: Props) => {
         <span>Ваш список пуст</span>
       ) : (
         <List>
-          {filteredTasks && filteredTasks.map((task) => <TaskItem key={task.id} task={task} todolistId={id} />)}
+          {filteredTasks &&
+            filteredTasks.map((task) => (
+              <TaskItem key={task.id} task={task} todolistId={id} disabled={entityStatus === 'loading'} />
+            ))}
         </List>
       )}
     </>
