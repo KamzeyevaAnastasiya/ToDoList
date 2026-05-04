@@ -1,5 +1,6 @@
 import { FilterValues } from '@/app/App'
 import { setAppStatusAC } from '@/app/app-slice'
+import type { RequestStatus } from '@/common/types'
 import { createAppSlice } from '@/common/utils'
 import { todolistsApi } from '@/features/todolists/api/todolistsApi'
 import type { Todolist } from '@/features/todolists/api/todolistsApi.types'
@@ -26,7 +27,7 @@ export const todolistsSlice = createAppSlice({
       {
         fulfilled: (state, action) => {
           action.payload?.todolists.forEach((tl) => {
-            state.push({ ...tl, filter: 'All' })
+            state.push({ ...tl, filter: 'All', entityStatus: 'idle' })
           })
         },
       },
@@ -46,7 +47,7 @@ export const todolistsSlice = createAppSlice({
       },
       {
         fulfilled: (state, action) => {
-          state.unshift({ ...action.payload, filter: 'All' })
+          state.unshift({ ...action.payload, filter: 'All', entityStatus: 'idle' })
         },
       },
     ),
@@ -54,6 +55,7 @@ export const todolistsSlice = createAppSlice({
       async (id: string, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
+          dispatch(changeTodolistStatusAC({ id, entityStatus: 'loading' }))
           await todolistsApi.deleteTodolist(id)
           dispatch(setAppStatusAC({ status: 'succeeded' }))
           return { id }
@@ -99,14 +101,27 @@ export const todolistsSlice = createAppSlice({
         todolist.filter = action.payload.filter
       }
     }),
+    changeTodolistStatusAC: create.reducer<{ id: string; entityStatus: RequestStatus }>((state, action) => {
+      const todolist = state.find((todolist) => todolist.id === action.payload.id)
+      if (todolist) {
+        todolist.entityStatus = action.payload.entityStatus
+      }
+    }),
   }),
 })
 
 export const { selectTodolists } = todolistsSlice.selectors
-export const { fetchTodolistsTC, createTodolistTC, deleteTodolistTC, changeTodolistTitleTC, changeTodolistFilterAC } =
-  todolistsSlice.actions
+export const {
+  fetchTodolistsTC,
+  createTodolistTC,
+  deleteTodolistTC,
+  changeTodolistTitleTC,
+  changeTodolistFilterAC,
+  changeTodolistStatusAC,
+} = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
 
 export type DomainTodolist = Todolist & {
   filter: FilterValues
+  entityStatus: RequestStatus
 }
