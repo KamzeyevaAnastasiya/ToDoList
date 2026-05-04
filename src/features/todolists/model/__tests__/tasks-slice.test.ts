@@ -74,6 +74,7 @@ test('array should be created for new todolist', () => {
     addedDate: '',
     order: 0,
     filter: 'All',
+    entityStatus: 'idle',
   }
   const endState = tasksReducer(startState, createTodolistTC.fulfilled(newTodolist, 'requestId', 'New todolist'))
 
