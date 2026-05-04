@@ -1,6 +1,6 @@
 import './App.css'
 import { selectThemeMode } from '@/app/app-slice'
-import { Header } from '@/common/components'
+import { ErrorSnackbar, Header } from '@/common/components'
 import type { DomainTask } from '@/features/todolists/api/tasksApi.types'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -24,6 +24,7 @@ export const App = () => {
         <CssBaseline />
         <Header />
         <Main />
+        <ErrorSnackbar />
       </div>
     </ThemeProvider>
   )
