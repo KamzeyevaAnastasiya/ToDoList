@@ -1,8 +1,8 @@
 import { FilterValues } from '@/app/App'
-import { setAppErrorAC, setAppStatusAC } from '@/app/app-slice'
+import { setAppStatusAC } from '@/app/app-slice'
 import { ResultCode } from '@/common/enums'
 import type { RequestStatus } from '@/common/types'
-import { createAppSlice } from '@/common/utils'
+import { createAppSlice, handleServerAppError, handleServerNetworkError } from '@/common/utils'
 import { todolistsApi } from '@/features/todolists/api/todolistsApi'
 import type { Todolist } from '@/features/todolists/api/todolistsApi.types'
 
@@ -21,7 +21,7 @@ export const todolistsSlice = createAppSlice({
           dispatch(setAppStatusAC({ status: 'succeeded' }))
           return { todolists: res.data }
         } catch (error) {
-          dispatch(setAppStatusAC({ status: 'failed' }))
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -43,16 +43,11 @@ export const todolistsSlice = createAppSlice({
             dispatch(setAppStatusAC({ status: 'succeeded' }))
             return res.data.data.item
           } else {
-            if (res.data.messages.length) {
-              dispatch(setAppErrorAC({ error: res.data.messages[0] }))
-            } else {
-              dispatch(setAppErrorAC({ error: 'Some error occurred' }))
-            }
-            dispatch(setAppStatusAC({ status: 'failed' }))
+            handleServerAppError(res.data, dispatch)
             return rejectWithValue(null)
           }
         } catch (error) {
-          dispatch(setAppStatusAC({ status: 'failed' }))
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -67,11 +62,18 @@ export const todolistsSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
           dispatch(changeTodolistStatusAC({ id, entityStatus: 'loading' }))
-          await todolistsApi.deleteTodolist(id)
-          dispatch(setAppStatusAC({ status: 'succeeded' }))
-          return { id }
+          const res = await todolistsApi.deleteTodolist(id)
+          if (res.data.resultCode === ResultCode.Success) {
+            dispatch(setAppStatusAC({ status: 'succeeded' }))
+            return { id }
+          } else {
+            dispatch(changeTodolistStatusAC({ id, entityStatus: 'failed' }))
+            handleServerAppError(res.data, dispatch)
+            return rejectWithValue(null)
+          }
         } catch (error) {
-          dispatch(setAppStatusAC({ status: 'failed' }))
+          dispatch(changeTodolistStatusAC({ id, entityStatus: 'failed' }))
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -88,11 +90,16 @@ export const todolistsSlice = createAppSlice({
       async (payload: { id: string; title: string }, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
-          await todolistsApi.changeTodolistTitle(payload)
-          dispatch(setAppStatusAC({ status: 'succeeded' }))
-          return payload
+          const res = await todolistsApi.changeTodolistTitle(payload)
+          if (res.data.resultCode === ResultCode.Success) {
+            dispatch(setAppStatusAC({ status: 'succeeded' }))
+            return payload
+          } else {
+            handleServerAppError(res.data, dispatch)
+            return rejectWithValue(null)
+          }
         } catch (error) {
-          dispatch(setAppStatusAC({ status: 'failed' }))
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
