@@ -1,5 +1,5 @@
 import { TaskPriority, TaskStatus } from '@/common/enums'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 
 export const domainTaskSchema = z.object({
   description: z.string().nullable(),
