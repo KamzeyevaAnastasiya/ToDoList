@@ -7,7 +7,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { useAppSelector } from '@/common/hooks/useAppSelector'
 import { getTheme } from '@/common/theme'
-import { Main } from '@/app/Main.tsx'
 
 export type FilterValues = 'All' | 'Active' | 'Completed'
 
