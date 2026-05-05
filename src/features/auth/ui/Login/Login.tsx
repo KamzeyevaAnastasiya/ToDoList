@@ -16,7 +16,6 @@ import styles from './Login.module.css'
 
 export const Login = () => {
   const {
-    register,
     handleSubmit,
     reset,
     control,
@@ -60,16 +59,33 @@ export const Login = () => {
             </p>
           </FormLabel>
           <FormGroup>
-            <TextField label="Email" margin="normal" error={!!errors.email} {...register('email')} />
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => <TextField {...field} label="Email" margin="normal" error={!!errors.email} />}
+            />
+
             {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
-            <TextField type="password" label="Password" margin="normal" {...register('password')} />
+
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} type="password" label="Password" margin="normal" error={!!errors.password} />
+              )}
+            />
+
+            {errors.password && <span className={styles.errorMessage}>{errors.password.message}</span>}
+
             <FormControlLabel
               label="Remember me"
               control={
                 <Controller
                   name={'rememberMe'}
                   control={control}
-                  render={({ field: { value, ...rest } }) => <Checkbox {...rest} checked={value} />}
+                  render={({ field }) => (
+                    <Checkbox {...field} onChange={(e) => field.onChange(e.target.checked)} checked={field.value} />
+                  )}
                 />
               }
             />
