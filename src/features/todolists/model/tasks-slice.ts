@@ -4,7 +4,7 @@ import type { RootState } from '@/app/store'
 import { ResultCode } from '@/common/enums'
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from '@/common/utils'
 import { tasksApi } from '@/features/todolists/api/tasksApi'
-import type { UpdateTaskModel } from '@/features/todolists/api/tasksApi.types'
+import { domainTaskSchema, type UpdateTaskModel } from '@/features/todolists/api/tasksApi.types'
 import { createTodolistTC, deleteTodolistTC } from '@/features/todolists/model/todolists-slice'
 
 export const tasksSlice = createAppSlice({
@@ -28,6 +28,7 @@ export const tasksSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
           const res = await tasksApi.getTasks(todolistId)
+          domainTaskSchema.array().parse(res.data.items)
           dispatch(setAppStatusAC({ status: 'succeeded' }))
           return { todolistId, tasks: res.data.items }
         } catch (error) {
