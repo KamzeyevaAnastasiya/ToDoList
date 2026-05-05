@@ -1,6 +1,8 @@
 import { selectThemeMode } from '@/app/app-slice'
 import { useAppSelector } from '@/common/hooks'
 import { getTheme } from '@/common/theme'
+import { type LoginInputs, loginSchema } from '@/features/auth/lib/schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -12,12 +14,6 @@ import TextField from '@mui/material/TextField'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 import styles from './Login.module.css'
 
-type LoginInputs = {
-  email: string
-  password: string
-  rememberMe: boolean
-}
-
 export const Login = () => {
   const {
     register,
@@ -25,7 +21,10 @@ export const Login = () => {
     reset,
     control,
     formState: { errors },
-  } = useForm<LoginInputs>({ defaultValues: { email: '', password: '', rememberMe: false } })
+  } = useForm<LoginInputs>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '', rememberMe: false },
+  })
 
   const themeMode = useAppSelector(selectThemeMode)
 
@@ -61,18 +60,7 @@ export const Login = () => {
             </p>
           </FormLabel>
           <FormGroup>
-            <TextField
-              label="Email"
-              margin="normal"
-              error={!!errors.email}
-              {...register('email', {
-                required: 'Email is required',
-                pattern: {
-                  value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                  message: 'Incorrect email address',
-                },
-              })}
-            />
+            <TextField label="Email" margin="normal" error={!!errors.email} {...register('email')} />
             {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
             <TextField type="password" label="Password" margin="normal" {...register('password')} />
             <FormControlLabel
