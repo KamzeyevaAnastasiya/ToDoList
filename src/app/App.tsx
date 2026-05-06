@@ -2,17 +2,10 @@ import './App.css'
 import { selectThemeMode } from '@/app/app-slice'
 import { ErrorSnackbar, Header } from '@/common/components'
 import { Routing } from '@/common/routing'
-import type { DomainTask } from '@/features/todolists/api/tasksApi.types'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { useAppSelector } from '@/common/hooks/useAppSelector'
 import { getTheme } from '@/common/theme'
-
-export type FilterValues = 'All' | 'Active' | 'Completed'
-
-export type TasksState = {
-  [todolistId: string]: DomainTask[]
-}
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
