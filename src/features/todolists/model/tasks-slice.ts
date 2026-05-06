@@ -1,10 +1,15 @@
 import { setAppStatusAC } from '@/app/app-slice'
-import type { TasksState } from '@/app/App.tsx'
 import type { RootState } from '@/app/store'
 import { ResultCode } from '@/common/enums'
+import { defaultBaseResponseSchema } from '@/common/types'
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from '@/common/utils'
 import { tasksApi } from '@/features/todolists/api/tasksApi'
-import { domainTaskSchema, type UpdateTaskModel } from '@/features/todolists/api/tasksApi.types'
+import {
+  defaultTaskResponseSchema,
+  type DomainTask,
+  domainTaskSchema,
+  type UpdateTaskModel,
+} from '@/features/todolists/api/tasksApi.types'
 import { createTodolistTC, deleteTodolistTC } from '@/features/todolists/model/todolists-slice'
 
 export const tasksSlice = createAppSlice({
@@ -47,6 +52,7 @@ export const tasksSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
           const res = await tasksApi.createTask(payload)
+          defaultTaskResponseSchema.parse(res.data)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
             return { task: res.data.data.item }
@@ -70,6 +76,7 @@ export const tasksSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
           const res = await tasksApi.deleteTask(payload)
+          defaultBaseResponseSchema.parse(res.data)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
             return payload
@@ -123,6 +130,7 @@ export const tasksSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
           const res = await tasksApi.updateTask({ todolistId, taskId, model })
+          defaultTaskResponseSchema.parse(res.data)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
             return res.data.data.item
@@ -151,3 +159,7 @@ export const tasksSlice = createAppSlice({
 export const { selectTasks } = tasksSlice.selectors
 export const { fetchTasksTC, createTaskTC, deleteTaskTC, updateTaskTC } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
+
+export type TasksState = {
+  [todolistId: string]: DomainTask[]
+}
