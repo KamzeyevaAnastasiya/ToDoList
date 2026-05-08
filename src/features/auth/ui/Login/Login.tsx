@@ -1,7 +1,8 @@
 import { selectThemeMode } from '@/app/app-slice'
-import { useAppSelector } from '@/common/hooks'
+import { useAppDispatch, useAppSelector } from '@/common/hooks'
 import { getTheme } from '@/common/theme'
-import { type LoginInputs, loginSchema } from '@/features/auth/lib/schemas'
+import { type LoginInputs, loginInputsSchema } from '@/features/auth/lib/schemas'
+import { loginTC } from '@/features/auth/model/auth-slice'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -21,7 +22,7 @@ export const Login = () => {
     control,
     formState: { errors },
   } = useForm<LoginInputs>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginInputsSchema),
     defaultValues: { email: '', password: '', rememberMe: false },
   })
 
@@ -29,8 +30,10 @@ export const Login = () => {
 
   const theme = getTheme(themeMode)
 
+  const dispatch = useAppDispatch()
+
   const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    console.log(data)
+    dispatch(loginTC(data))
     reset()
   }
 

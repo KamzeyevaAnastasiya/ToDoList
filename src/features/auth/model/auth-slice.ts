@@ -1,0 +1,47 @@
+import { setAppStatusAC } from '@/app/app-slice'
+import { ResultCode } from '@/common/enums'
+import { createAppSlice, handleServerAppError, handleServerNetworkError } from '@/common/utils'
+import { authApi } from '@/features/auth/api/authApi'
+import { defaultLoginResponseSchema } from '@/features/auth/api/authApi.types'
+import type { LoginInputs } from '@/features/auth/lib/schemas'
+
+export const authSlice = createAppSlice({
+  name: 'auth',
+  initialState: {
+    isLoggedIn: false,
+  },
+  selectors: {
+    selectIsLoggedIn: (state) => state.isLoggedIn,
+  },
+  reducers: (create) => ({
+    loginTC: create.asyncThunk(
+      async (data: LoginInputs, { dispatch, rejectWithValue }) => {
+        try {
+          dispatch(setAppStatusAC({ status: 'loading' }))
+          const res = await authApi.login(data)
+          const validatedResponse = defaultLoginResponseSchema.parse(res.data)
+          if (validatedResponse.resultCode === ResultCode.Success) {
+            dispatch(setAppStatusAC({ status: 'succeeded' }))
+            return { isLoggedIn: true }
+          } else {
+            handleServerAppError(validatedResponse, dispatch)
+            return rejectWithValue(null)
+          }
+        } catch (error) {
+          console.log(error)
+          handleServerNetworkError(error, dispatch)
+          return rejectWithValue(null)
+        }
+      },
+      {
+        fulfilled: (state, action) => {
+          state.isLoggedIn = action.payload.isLoggedIn
+        },
+      },
+    ),
+  }),
+})
+
+export const { selectIsLoggedIn } = authSlice.selectors
+export const { loginTC } = authSlice.actions
+export const authReducer = authSlice.reducer
