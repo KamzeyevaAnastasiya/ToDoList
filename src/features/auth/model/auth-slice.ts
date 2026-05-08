@@ -1,4 +1,5 @@
 import { setAppStatusAC } from '@/app/app-slice'
+import { AUTH_TOKEN } from '@/common/constants'
 import { ResultCode } from '@/common/enums'
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from '@/common/utils'
 import { authApi } from '@/features/auth/api/authApi'
@@ -22,6 +23,7 @@ export const authSlice = createAppSlice({
           const validatedResponse = defaultLoginResponseSchema.parse(res.data)
           if (validatedResponse.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
+            localStorage.setItem(AUTH_TOKEN, validatedResponse.data.token)
             return { isLoggedIn: true }
           } else {
             handleServerAppError(validatedResponse, dispatch)
