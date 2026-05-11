@@ -1,9 +1,8 @@
 import { selectThemeMode } from '@/app/app-slice'
 import { useAppDispatch, useAppSelector } from '@/common/hooks'
-import { Path } from '@/common/routing'
 import { getTheme } from '@/common/theme'
 import { type LoginInputs, loginInputsSchema } from '@/features/auth/lib/schemas'
-import { loginTC, selectIsLoggedIn } from '@/features/auth/model/auth-slice'
+import { loginTC } from '@/features/auth/model/auth-slice'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -14,7 +13,6 @@ import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
-import { Navigate } from 'react-router'
 import styles from './Login.module.css'
 
 export const Login = () => {
@@ -34,14 +32,9 @@ export const Login = () => {
 
   const dispatch = useAppDispatch()
 
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
-
   const onSubmit: SubmitHandler<LoginInputs> = (data) => {
     dispatch(loginTC(data))
     reset()
-  }
-  if (isLoggedIn) {
-    return <Navigate to={Path.Main} />
   }
 
   return (
