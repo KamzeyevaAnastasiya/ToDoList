@@ -1,5 +1,6 @@
 import { setAppStatusAC } from '@/app/app-slice'
 import type { RootState } from '@/app/store'
+import { clearDataAC } from '@/common/actions'
 import { ResultCode } from '@/common/enums'
 import { defaultBaseResponseSchema } from '@/common/types'
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from '@/common/utils'
@@ -12,9 +13,11 @@ import {
 } from '@/features/todolists/api/tasksApi.types'
 import { createTodolistTC, deleteTodolistTC } from '@/features/todolists/model/todolists-slice'
 
+const initialState = {} as TasksState
+
 export const tasksSlice = createAppSlice({
   name: 'tasks',
-  initialState: {} as TasksState,
+  initialState,
   selectors: {
     selectTasks: (state) => state,
   },
@@ -25,6 +28,9 @@ export const tasksSlice = createAppSlice({
       })
       .addCase(deleteTodolistTC.fulfilled, (state, action) => {
         delete state[action.payload.id]
+      })
+      .addCase(clearDataAC, () => {
+        return initialState
       })
   },
   reducers: (create) => ({
