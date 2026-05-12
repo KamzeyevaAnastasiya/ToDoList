@@ -12,9 +12,11 @@ export const authSlice = createAppSlice({
   name: 'auth',
   initialState: {
     isLoggedIn: false,
+    userData: null as string | null,
   },
   selectors: {
     selectIsLoggedIn: (state) => state.isLoggedIn,
+    selectUserData: (state) => state.userData,
   },
   reducers: (create) => ({
     loginTC: create.asyncThunk(
@@ -26,13 +28,13 @@ export const authSlice = createAppSlice({
           if (validatedResponse.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
             localStorage.setItem(AUTH_TOKEN, validatedResponse.data.token)
-            return { isLoggedIn: true }
+            const meRes = await authApi.me()
+            return { isLoggedIn: true, userData: meRes.data.data.login }
           } else {
             handleServerAppError(validatedResponse, dispatch)
             return rejectWithValue(null)
           }
         } catch (error) {
-          console.log(error)
           handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
@@ -40,6 +42,7 @@ export const authSlice = createAppSlice({
       {
         fulfilled: (state, action) => {
           state.isLoggedIn = action.payload.isLoggedIn
+          state.userData = action.payload.userData
         },
       },
     ),
@@ -59,7 +62,6 @@ export const authSlice = createAppSlice({
             return rejectWithValue(null)
           }
         } catch (error) {
-          console.log(error)
           handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
@@ -78,13 +80,12 @@ export const authSlice = createAppSlice({
           const validatedResponse = meResponseSchema.parse(res.data)
           if (validatedResponse.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
-            return { isLoggedIn: true }
+            return { isLoggedIn: true, userData: validatedResponse.data.login }
           } else {
             handleServerAppError(validatedResponse, dispatch)
             return rejectWithValue(null)
           }
         } catch (error) {
-          console.log(error)
           handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
@@ -92,12 +93,13 @@ export const authSlice = createAppSlice({
       {
         fulfilled: (state, action) => {
           state.isLoggedIn = action.payload.isLoggedIn
+          state.userData = action.payload.userData
         },
       },
     ),
   }),
 })
 
-export const { selectIsLoggedIn } = authSlice.selectors
+export const { selectIsLoggedIn, selectUserData } = authSlice.selectors
 export const { loginTC, logoutTC, initializeAppTC } = authSlice.actions
 export const authReducer = authSlice.reducer
