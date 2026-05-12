@@ -1,9 +1,9 @@
 import { NavButton } from '@/common/components'
 import { useAppDispatch, useAppSelector } from '@/common/hooks'
+import { Path } from '@/common/routing'
 import { containerSx } from '@/common/styles'
-import { getTheme } from '@/common/theme'
-import { logoutTC, selectIsLoggedIn } from '@/features/auth/model/auth-slice'
-import { LinearProgress } from '@mui/material'
+import { logoutTC, selectIsLoggedIn, selectUserData } from '@/features/auth/model/auth-slice'
+import { LinearProgress, Link } from '@mui/material'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
 import AppBar from '@mui/material/AppBar'
@@ -14,14 +14,11 @@ import { changeThemeModeAC, selectStatus, selectThemeMode } from '@/app/app-slic
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
-
   const status = useAppSelector(selectStatus)
-
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const userLogin = useAppSelector(selectUserData)
 
   const dispatch = useAppDispatch()
-
-  const theme = getTheme(themeMode)
 
   const changeMode = () => {
     dispatch(changeThemeModeAC({ themeMode: themeMode === 'light' ? 'dark' : 'light' }))
@@ -39,8 +36,11 @@ export const Header = () => {
             <MenuIcon />
           </IconButton>
           <div>
+            {isLoggedIn && <span>{userLogin}</span>}
             {isLoggedIn && <NavButton onClick={logoutHandler}>Sign out</NavButton>}
-            <NavButton background={theme.palette.primary.dark}>FAQ</NavButton>
+            <NavButton component={Link} to={Path.Faq}>
+              FAQ
+            </NavButton>
             <Switch color={'default'} onChange={changeMode} />
           </div>
         </Container>
