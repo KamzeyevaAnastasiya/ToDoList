@@ -7,6 +7,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const todolistsApi = createApi({
   reducerPath: 'todolistsApi',
+  tagTypes: ['Todolist'],
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL,
     headers: {
@@ -25,6 +26,7 @@ export const todolistsApi = createApi({
         }),
         transformResponse: (todolists: Todolist[]): DomainTodolist[] =>
           todolists.map((todolist) => ({ ...todolist, filter: 'All', entityStatus: 'idle' })),
+        providesTags: ['Todolist'],
       }),
       createTodolist: build.mutation<CreateTodolistResponse, string>({
         query: (title) => ({
@@ -32,12 +34,14 @@ export const todolistsApi = createApi({
           url: '/todo-lists',
           body: { title },
         }),
+        invalidatesTags: ['Todolist'],
       }),
       deleteTodolist: build.mutation<DefaultBaseResponse, string>({
         query: (id) => ({
           method: 'delete',
           url: `/todo-lists/${id}`,
         }),
+        invalidatesTags: ['Todolist'],
       }),
       updateTodolistTitle: build.mutation<DefaultBaseResponse, { id: string; title: string }>({
         query: ({ id, title }) => ({
@@ -45,6 +49,7 @@ export const todolistsApi = createApi({
           url: `/todo-lists/${id}`,
           body: { title },
         }),
+        invalidatesTags: ['Todolist'],
       }),
     }
   },
