@@ -5,8 +5,7 @@ import { ResultCode } from '@/common/enums'
 import { useAppDispatch, useAppSelector } from '@/common/hooks'
 import { Path } from '@/common/routing'
 import { containerSx } from '@/common/styles'
-import { useLogoutMutation } from '@/features/auth/api/authApi'
-import { selectUserData } from '@/features/auth/model/auth-slice'
+import { useLogoutMutation, useMeQuery } from '@/features/auth/api/authApi'
 import { LinearProgress, Link } from '@mui/material'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
@@ -18,11 +17,11 @@ import { changeThemeModeAC, selectIsLoggedIn, selectStatus, selectThemeMode, set
 
 export const Header = () => {
   const [logout] = useLogoutMutation()
+  const { data } = useMeQuery()
 
   const themeMode = useAppSelector(selectThemeMode)
   const status = useAppSelector(selectStatus)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
-  const userLogin = useAppSelector(selectUserData)
 
   const dispatch = useAppDispatch()
 
@@ -48,7 +47,7 @@ export const Header = () => {
             <MenuIcon />
           </IconButton>
           <div>
-            {isLoggedIn && <span>{userLogin}</span>}
+            {isLoggedIn && <span>{data?.data.login}</span>}
             {isLoggedIn && <NavButton onClick={logoutHandler}>Sign out</NavButton>}
             <NavButton component={Link} to={Path.Faq}>
               FAQ
