@@ -9,7 +9,7 @@ type Props = {
 }
 
 export const Tasks = ({ todolist }: Props) => {
-  const { id, filter, entityStatus } = todolist
+  const { id, filter } = todolist
 
   const { data } = useGetTasksQuery(id)
 
@@ -27,10 +27,7 @@ export const Tasks = ({ todolist }: Props) => {
         <span>Ваш список пуст</span>
       ) : (
         <List>
-          {filteredTasks &&
-            filteredTasks.map((task) => (
-              <TaskItem key={task.id} task={task} todolistId={id} disabled={entityStatus === 'loading'} />
-            ))}
+          {filteredTasks && filteredTasks.map((task) => <TaskItem key={task.id} task={task} todolist={todolist} />)}
         </List>
       )}
     </>
