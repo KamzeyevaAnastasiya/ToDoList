@@ -100,6 +100,6 @@ export const authSlice = createAppSlice({
   }),
 })
 
-export const { selectIsLoggedIn, selectUserData } = authSlice.selectors
+export const { selectUserData } = authSlice.selectors
 export const { loginTC, logoutTC, initializeAppTC } = authSlice.actions
 export const authReducer = authSlice.reducer
