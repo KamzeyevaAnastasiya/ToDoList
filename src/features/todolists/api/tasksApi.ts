@@ -12,11 +12,18 @@ export const tasksApi = baseApi.injectEndpoints({
           url: `/todo-lists/${todolistId}/tasks`,
         }),
       }),
+      createTask: build.mutation<DefaultTaskResponse, { todolistId: string; title: string }>({
+        query: ({ todolistId, title }) => ({
+          method: 'post',
+          url: `/todo-lists/${todolistId}/tasks`,
+          body: { title },
+        }),
+      }),
     }
   },
 })
 
-export const { useGetTasksQuery } = tasksApi
+export const { useGetTasksQuery, useCreateTaskMutation } = tasksApi
 
 export const _tasksApi = {
   getTasks(todolistId: string) {
