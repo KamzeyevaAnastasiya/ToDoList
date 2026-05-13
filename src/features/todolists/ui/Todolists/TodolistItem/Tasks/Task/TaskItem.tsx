@@ -1,13 +1,14 @@
 import { EditableSpan } from '@/common/components'
 import { TaskStatus } from '@/common/enums'
 import { useAppDispatch } from '@/common/hooks'
+import { useDeleteTaskMutation } from '@/features/todolists/api/tasksApi'
 import type { DomainTask } from '@/features/todolists/api/tasksApi.types'
 import { ChangeEvent } from 'react'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Checkbox from '@mui/material/Checkbox'
 import ListItem from '@mui/material/ListItem'
-import { deleteTaskTC, updateTaskTC } from '@/features/todolists/model/tasks-slice.ts'
+import { updateTaskTC } from '@/features/todolists/model/tasks-slice.ts'
 import { getListItemSx } from '@/features/todolists/ui/Todolists/TodolistItem/Tasks/Task/TaskItem.styles.ts'
 
 type Props = {
@@ -17,10 +18,12 @@ type Props = {
 }
 
 export const TaskItem = ({ task, todolistId, disabled }: Props) => {
+  const [deleteTask] = useDeleteTaskMutation()
+
   const dispatch = useAppDispatch()
 
-  const deleteTask = () => {
-    dispatch(deleteTaskTC({ todolistId, taskId: task.id }))
+  const deleteTaskHandler = () => {
+    deleteTask({ todolistId, taskId: task.id })
   }
 
   const changeTaskStatus = (event: ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +49,7 @@ export const TaskItem = ({ task, todolistId, disabled }: Props) => {
         <EditableSpan value={task.title} onChange={changeTaskTitle} disabled={disabled} />
       </div>
       <span>{new Date(task.addedDate).toLocaleDateString()}</span>
-      <IconButton onClick={deleteTask} disabled={disabled}>
+      <IconButton onClick={deleteTaskHandler} disabled={disabled}>
         <DeleteIcon />
       </IconButton>
     </ListItem>
