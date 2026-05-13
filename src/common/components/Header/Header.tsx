@@ -1,8 +1,12 @@
+import { clearDataAC } from '@/common/actions'
 import { NavButton } from '@/common/components'
+import { AUTH_TOKEN } from '@/common/constants'
+import { ResultCode } from '@/common/enums'
 import { useAppDispatch, useAppSelector } from '@/common/hooks'
 import { Path } from '@/common/routing'
 import { containerSx } from '@/common/styles'
-import { logoutTC, selectUserData } from '@/features/auth/model/auth-slice'
+import { useLogoutMutation } from '@/features/auth/api/authApi'
+import { selectUserData } from '@/features/auth/model/auth-slice'
 import { LinearProgress, Link } from '@mui/material'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
@@ -10,9 +14,11 @@ import AppBar from '@mui/material/AppBar'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import Switch from '@mui/material/Switch'
-import { changeThemeModeAC, selectIsLoggedIn, selectStatus, selectThemeMode } from '@/app/app-slice.ts'
+import { changeThemeModeAC, selectIsLoggedIn, selectStatus, selectThemeMode, setIsLoggedInAC } from '@/app/app-slice.ts'
 
 export const Header = () => {
+  const [logout] = useLogoutMutation()
+
   const themeMode = useAppSelector(selectThemeMode)
   const status = useAppSelector(selectStatus)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
@@ -25,7 +31,13 @@ export const Header = () => {
   }
 
   const logoutHandler = () => {
-    dispatch(logoutTC())
+    logout().then((res) => {
+      if (res.data?.resultCode === ResultCode.Success) {
+        dispatch(setIsLoggedInAC({ isLoggedIn: false }))
+        localStorage.removeItem(AUTH_TOKEN)
+        dispatch(clearDataAC())
+      }
+    })
   }
 
   return (
