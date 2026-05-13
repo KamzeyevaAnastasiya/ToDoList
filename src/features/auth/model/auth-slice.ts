@@ -4,7 +4,7 @@ import { AUTH_TOKEN } from '@/common/constants'
 import { ResultCode } from '@/common/enums'
 import { defaultBaseResponseSchema } from '@/common/types'
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from '@/common/utils'
-import { authApi } from '@/features/auth/api/authApi'
+import { _authApi } from '@/features/auth/api/authApi'
 import { loginResponseSchema, meResponseSchema } from '@/features/auth/api/authApi.types'
 import type { LoginInputs } from '@/features/auth/lib/schemas'
 
@@ -23,12 +23,12 @@ export const authSlice = createAppSlice({
       async (data: LoginInputs, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
-          const res = await authApi.login(data)
+          const res = await _authApi.login(data)
           const validatedResponse = loginResponseSchema.parse(res.data)
           if (validatedResponse.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
             localStorage.setItem(AUTH_TOKEN, validatedResponse.data.token)
-            const meRes = await authApi.me()
+            const meRes = await _authApi.me()
             return { isLoggedIn: true, userData: meRes.data.data.login }
           } else {
             handleServerAppError(validatedResponse, dispatch)
@@ -50,7 +50,7 @@ export const authSlice = createAppSlice({
       async (_, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
-          const res = await authApi.logout()
+          const res = await _authApi.logout()
           const validatedResponse = defaultBaseResponseSchema.parse(res.data)
           if (validatedResponse.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
@@ -76,7 +76,7 @@ export const authSlice = createAppSlice({
       async (_, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: 'loading' }))
-          const res = await authApi.me()
+          const res = await _authApi.me()
           const validatedResponse = meResponseSchema.parse(res.data)
           if (validatedResponse.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: 'succeeded' }))
