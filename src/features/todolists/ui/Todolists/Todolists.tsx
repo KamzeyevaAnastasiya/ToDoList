@@ -1,18 +1,10 @@
-import { useAppDispatch } from '@/common/hooks'
-import { useAppSelector } from '@/common/hooks/useAppSelector.ts'
-import { fetchTodolistsTC, selectTodolists } from '@/features/todolists/model/todolists-slice'
+import { useGetTodolistsQuery } from '@/features/todolists/api/todolistsApi'
 import { Paper } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import { TodolistItem } from '@/features/todolists/ui/Todolists/TodolistItem/TodolistItem.tsx'
-import { useEffect } from 'react'
 
 export const Todolists = () => {
-  const todolists = useAppSelector(selectTodolists)
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchTodolistsTC())
-  }, [])
+  const { data: todolists } = useGetTodolistsQuery()
 
   return (
     <>
