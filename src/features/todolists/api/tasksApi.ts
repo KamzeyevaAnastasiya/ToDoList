@@ -1,8 +1,24 @@
+import { baseApi } from '@/app/baseApi'
 import { instance } from '@/common/instance'
 import type { DefaultBaseResponse } from '@/common/types'
 import type { DefaultTaskResponse, GetTasksResponse, UpdateTaskModel } from '@/features/todolists/api/tasksApi.types'
 
-export const tasksApi = {
+export const tasksApi = baseApi.injectEndpoints({
+  endpoints: (build) => {
+    return {
+      getTasks: build.query<GetTasksResponse, string>({
+        query: (todolistId) => ({
+          method: 'get',
+          url: `/todo-lists/${todolistId}/tasks`,
+        }),
+      }),
+    }
+  },
+})
+
+export const { useGetTasksQuery } = tasksApi
+
+export const _tasksApi = {
   getTasks(todolistId: string) {
     return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
   },
