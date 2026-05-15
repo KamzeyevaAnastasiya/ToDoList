@@ -1,4 +1,5 @@
 import { baseApi } from '@/app/baseApi'
+import { PAGE_SIZE } from '@/common/constants'
 import { instance } from '@/common/instance'
 import type { DefaultBaseResponse } from '@/common/types'
 import type { DefaultTaskResponse, GetTasksResponse, UpdateTaskModel } from '@/features/todolists/api/tasksApi.types'
@@ -6,12 +7,13 @@ import type { DefaultTaskResponse, GetTasksResponse, UpdateTaskModel } from '@/f
 export const tasksApi = baseApi.injectEndpoints({
   endpoints: (build) => {
     return {
-      getTasks: build.query<GetTasksResponse, string>({
-        query: (todolistId) => ({
+      getTasks: build.query<GetTasksResponse, { todolistId: string; params: { page: number } }>({
+        query: ({ todolistId, params }) => ({
           method: 'get',
           url: `/todo-lists/${todolistId}/tasks`,
+          params: { ...params, count: PAGE_SIZE },
         }),
-        providesTags: (_res, _err, todolistId) => [{ type: 'Task', id: todolistId }],
+        providesTags: (_res, _err, { todolistId }) => [{ type: 'Task', id: todolistId }],
       }),
       createTask: build.mutation<DefaultTaskResponse, { todolistId: string; title: string }>({
         query: ({ todolistId, title }) => ({
