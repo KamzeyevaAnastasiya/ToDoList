@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from '@/common/constants'
 import { TaskStatus } from '@/common/enums'
 import { useGetTasksQuery } from '@/features/todolists/api/tasksApi'
 import type { DomainTodolist } from '@/features/todolists/lib/types'
@@ -39,7 +40,9 @@ export const Tasks = ({ todolist }: Props) => {
           <List>
             {filteredTasks && filteredTasks.map((task) => <TaskItem key={task.id} task={task} todolist={todolist} />)}
           </List>
-          <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
+          {data && data.totalCount > PAGE_SIZE && (
+            <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
+          )}
         </>
       )}
     </>
