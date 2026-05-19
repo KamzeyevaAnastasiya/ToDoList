@@ -7,6 +7,7 @@ import { TasksSkeleton } from '@/features/todolists/ui/Todolists/TodolistItem/Ta
 import List from '@mui/material/List'
 import { TaskItem } from '@/features/todolists/ui/Todolists/TodolistItem/Tasks/Task/TaskItem.tsx'
 import { useState } from 'react'
+import styles from './Tasks.module.css'
 
 type Props = {
   todolist: DomainTodolist
@@ -34,7 +35,7 @@ export const Tasks = ({ todolist }: Props) => {
   return (
     <>
       {filteredTasks && filteredTasks.length === 0 ? (
-        <span>Ваш список пуст</span>
+        <span className={styles.span}>Ваш список пуст</span>
       ) : (
         <>
           <List>
