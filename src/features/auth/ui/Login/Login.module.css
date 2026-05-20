@@ -2,3 +2,16 @@
     color: red;
     font-size: 14px;
 }
+
+.registerLink {
+    margin-left: 5px;
+}
+
+.captchaContainer {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.captchaImage {
+    max-width: 100%;
+}

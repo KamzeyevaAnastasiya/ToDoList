@@ -1,6 +1,6 @@
 import { baseApi } from '@/app/baseApi'
 import type { DefaultBaseResponse } from '@/common/types'
-import type { LoginResponse, MeResponse } from '@/features/auth/api/authApi.types'
+import type { CaptchaResponse, LoginResponse, MeResponse } from '@/features/auth/api/authApi.types'
 import type { LoginInputs } from '@/features/auth/lib/schemas'
 
 export const authApi = baseApi.injectEndpoints({
@@ -25,8 +25,14 @@ export const authApi = baseApi.injectEndpoints({
           url: '/auth/login',
         }),
       }),
+      captcha: build.query<CaptchaResponse, void>({
+        query: () => ({
+          method: 'get',
+          url: '/security/get-captcha-url',
+        }),
+      }),
     }
   },
 })
 
-export const { useMeQuery, useLoginMutation, useLogoutMutation } = authApi
+export const { useMeQuery, useLoginMutation, useLogoutMutation, useLazyCaptchaQuery } = authApi

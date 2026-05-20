@@ -1,9 +1,9 @@
-import { selectThemeMode, setIsLoggedInAC } from '@/app/app-slice'
+import { selectCaptchaUrl, selectThemeMode, setCaptchaUrlAC, setIsLoggedInAC } from '@/app/app-slice'
 import { AUTH_TOKEN } from '@/common/constants'
 import { ResultCode } from '@/common/enums'
 import { useAppDispatch, useAppSelector } from '@/common/hooks'
 import { getTheme } from '@/common/theme'
-import { useLoginMutation } from '@/features/auth/api/authApi'
+import { useLazyCaptchaQuery, useLoginMutation } from '@/features/auth/api/authApi'
 import { type LoginInputs, loginInputsSchema } from '@/features/auth/lib/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Grid from '@mui/material/Grid'
@@ -19,15 +19,19 @@ import styles from './Login.module.css'
 
 export const Login = () => {
   const [login] = useLoginMutation()
+  const [getCaptcha] = useLazyCaptchaQuery()
+
+  const captchaUrl = useAppSelector(selectCaptchaUrl)
 
   const {
     handleSubmit,
     reset,
     control,
+    setError,
     formState: { errors },
   } = useForm<LoginInputs>({
     resolver: zodResolver(loginInputsSchema),
-    defaultValues: { email: '', password: '', rememberMe: false },
+    defaultValues: { email: '', password: '', rememberMe: false, captcha: '' },
   })
 
   const themeMode = useAppSelector(selectThemeMode)
@@ -36,15 +40,23 @@ export const Login = () => {
 
   const dispatch = useAppDispatch()
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    login(data).then((res) => {
-      if (res.data?.resultCode === ResultCode.Success) {
-        dispatch(setIsLoggedInAC({ isLoggedIn: true }))
-        localStorage.setItem(AUTH_TOKEN, res.data.data.token)
-        reset()
-      }
-    })
-    reset()
+  const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+    const res = await login(data)
+
+    if (res.data?.resultCode === ResultCode.Success) {
+      dispatch(setIsLoggedInAC({ isLoggedIn: true }))
+      localStorage.setItem(AUTH_TOKEN, res.data.data.token)
+      dispatch(setCaptchaUrlAC({ url: null }))
+      reset()
+    }
+    if (res.data?.resultCode === ResultCode.Captcha) {
+      const captchaRes = await getCaptcha().unwrap()
+      dispatch(setCaptchaUrlAC({ url: captchaRes.url }))
+      setError('captcha', {
+        type: 'server',
+        message: 'Incorrect captcha',
+      })
+    }
   }
 
   return (
@@ -55,7 +67,8 @@ export const Login = () => {
             <p>
               To login get registered
               <a
-                style={{ color: theme.palette.primary.main, marginLeft: '5px' }}
+                className={styles.registerLink}
+                style={{ color: theme.palette.primary.main }}
                 href="https://social-network.samuraijs.com"
                 target="_blank"
                 rel="noreferrer"
@@ -102,6 +115,24 @@ export const Login = () => {
                 />
               }
             />
+
+            {captchaUrl && (
+              <>
+                <div className={styles.captchaContainer}>
+                  <img src={captchaUrl} alt="captcha" className={styles.captchaImage} />
+                </div>
+
+                <Controller
+                  name="captcha"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField {...field} label="Enter captcha" margin="normal" error={!!errors.captcha} />
+                  )}
+                />
+                {errors.captcha && <span className={styles.errorMessage}>{errors.captcha.message}</span>}
+              </>
+            )}
+
             <Button type="submit" variant="contained" color="primary">
               Login
             </Button>
