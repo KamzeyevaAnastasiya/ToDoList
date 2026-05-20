@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/common/hooks'
 import { Path } from '@/common/routing'
 import { containerSx } from '@/common/styles'
 import { useLogoutMutation, useMeQuery } from '@/features/auth/api/authApi'
-import { LinearProgress, Link } from '@mui/material'
+import { LinearProgress } from '@mui/material'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
 import AppBar from '@mui/material/AppBar'
@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import Switch from '@mui/material/Switch'
 import { changeThemeModeAC, selectIsLoggedIn, selectStatus, selectThemeMode, setIsLoggedInAC } from '@/app/app-slice.ts'
+import { Link } from 'react-router'
 
 export const Header = () => {
   const [logout] = useLogoutMutation()
