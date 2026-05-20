@@ -52,10 +52,16 @@ export const Header = () => {
           </IconButton>
           <div>
             {isLoggedIn && <span>{data?.data.login}</span>}
-            {isLoggedIn && <NavButton onClick={logoutHandler}>Sign out</NavButton>}
+
+            <NavButton component={Link} to={Path.Main}>
+              Main
+            </NavButton>
             <NavButton component={Link} to={Path.Faq}>
               FAQ
             </NavButton>
+
+            {isLoggedIn && <NavButton onClick={logoutHandler}>Sign out</NavButton>}
+
             <Switch color={'default'} onChange={changeMode} />
           </div>
         </Container>
