@@ -25,7 +25,7 @@ const faqData = [
 export const Faq = () => {
   return (
     <Container maxWidth={'md'}>
-      <Grid container sx={{ display: 'inline-block', maxWidth: '800px', margin: '0 auto', p: 4 }}>
+      <Grid container sx={{ display: 'block', maxWidth: '800px', margin: '0 auto', p: 4 }}>
         <Grid>
           <Typography variant="h4" component="h1" align="center" marginBottom={5}>
             Часто задаваемые вопросы (FAQ)
