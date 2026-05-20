@@ -11,10 +11,10 @@ import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
 import AppBar from '@mui/material/AppBar'
 import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
 import Switch from '@mui/material/Switch'
 import { changeThemeModeAC, selectIsLoggedIn, selectStatus, selectThemeMode, setIsLoggedInAC } from '@/app/app-slice.ts'
 import { Link } from 'react-router'
+import HomeIcon from '@mui/icons-material/Home'
 
 export const Header = () => {
   const [logout] = useLogoutMutation()
@@ -47,21 +47,15 @@ export const Header = () => {
     <AppBar position="static" sx={{ mb: '30px' }} enableColorOnDark={false}>
       <Toolbar>
         <Container maxWidth={'lg'} sx={containerSx}>
-          <IconButton color="inherit">
-            <MenuIcon />
+          <IconButton component={Link} to={Path.Main}>
+            <HomeIcon color="inherit" fontSize="medium" />
           </IconButton>
           <div>
             {isLoggedIn && <span>{data?.data.login}</span>}
-
-            <NavButton component={Link} to={Path.Main}>
-              Main
-            </NavButton>
             <NavButton component={Link} to={Path.Faq}>
               FAQ
             </NavButton>
-
             {isLoggedIn && <NavButton onClick={logoutHandler}>Sign out</NavButton>}
-
             <Switch color={'default'} onChange={changeMode} />
           </div>
         </Container>
