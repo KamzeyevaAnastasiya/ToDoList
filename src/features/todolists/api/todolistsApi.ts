@@ -18,7 +18,7 @@ export const todolistsApi = baseApi.injectEndpoints({
           const parsed = todolistSchema.array().safeParse(response)
           if (!parsed.success) {
             console.error('Zod validation failed for todolists:', parsed.error.issues)
-            return [] // или выбросить ошибку, если хотите показать fallback UI
+            return []
           }
           return parsed.data.map((todolist) => ({ ...todolist, filter: 'All', entityStatus: 'idle' }))
         },
