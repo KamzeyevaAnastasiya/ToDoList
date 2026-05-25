@@ -1,7 +1,10 @@
 import { baseApi } from '@/app/baseApi'
 import { PAGE_SIZE } from '@/common/constants'
+import { defaultBaseResponseSchema } from '@/common/schemas'
 import type { DefaultBaseResponse } from '@/common/types'
+import { withZodCatch } from '@/common/utils/withZodCatch'
 import type { DefaultTaskResponse, GetTasksResponse, UpdateTaskModel } from '@/features/todolists/api/tasksApi.types'
+import { defaultTaskResponseSchema, getTasksResponseSchema } from '@/features/todolists/lib/schemas'
 
 export const tasksApi = baseApi.injectEndpoints({
   endpoints: (build) => {
@@ -12,6 +15,7 @@ export const tasksApi = baseApi.injectEndpoints({
           url: `/todo-lists/${todolistId}/tasks`,
           params: { ...params, count: PAGE_SIZE },
         }),
+        ...withZodCatch(getTasksResponseSchema),
         providesTags: (_res, _err, { todolistId }) => [{ type: 'Task', id: todolistId }],
       }),
       createTask: build.mutation<DefaultTaskResponse, { todolistId: string; title: string }>({
@@ -20,6 +24,7 @@ export const tasksApi = baseApi.injectEndpoints({
           url: `/todo-lists/${todolistId}/tasks`,
           body: { title },
         }),
+        ...withZodCatch(defaultTaskResponseSchema),
         invalidatesTags: (_res, _err, { todolistId }) => [{ type: 'Task', id: todolistId }],
       }),
       deleteTask: build.mutation<DefaultBaseResponse, { todolistId: string; taskId: string }>({
@@ -58,6 +63,7 @@ export const tasksApi = baseApi.injectEndpoints({
             })
           }
         },
+        ...withZodCatch(defaultTaskResponseSchema),
         invalidatesTags: (_res, _err, { todolistId }) => [{ type: 'Task', id: todolistId }],
       }),
       reorderTask: build.mutation<
@@ -101,6 +107,7 @@ export const tasksApi = baseApi.injectEndpoints({
             })
           }
         },
+        ...withZodCatch(defaultBaseResponseSchema),
         invalidatesTags: (_res, _err, { todolistId }) => [{ type: 'Task', id: todolistId }],
       }),
     }
