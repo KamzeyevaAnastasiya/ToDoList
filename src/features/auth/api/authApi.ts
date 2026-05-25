@@ -1,7 +1,6 @@
 import { baseApi } from '@/app/baseApi'
 import type { DefaultBaseResponse } from '@/common/types'
-import type { CaptchaResponse, LoginResponse, MeResponse } from '@/features/auth/api/authApi.types'
-import type { LoginInputs } from '@/features/auth/lib/schemas'
+import type { CaptchaResponse, LoginInputs, LoginResponse, MeResponse } from '@/features/auth/api/authApi.types'
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => {
