@@ -1,6 +1,8 @@
 import { baseApi } from '@/app/baseApi'
 import type { DefaultBaseResponse } from '@/common/types'
+import { withZodCatch } from '@/common/utils/withZodCatch'
 import type { CaptchaResponse, LoginInputs, LoginResponse, MeResponse } from '@/features/auth/api/authApi.types'
+import { captchaSchema, loginResponseSchema, meResponseSchema } from '@/features/auth/lib/schemas'
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => {
@@ -10,6 +12,7 @@ export const authApi = baseApi.injectEndpoints({
           method: 'get',
           url: '/auth/me',
         }),
+        ...withZodCatch(meResponseSchema),
       }),
       login: build.mutation<LoginResponse, LoginInputs>({
         query: (body) => ({
@@ -17,6 +20,7 @@ export const authApi = baseApi.injectEndpoints({
           url: '/auth/login',
           body,
         }),
+        ...withZodCatch(loginResponseSchema),
       }),
       logout: build.mutation<DefaultBaseResponse, void>({
         query: () => ({
@@ -29,6 +33,7 @@ export const authApi = baseApi.injectEndpoints({
           method: 'get',
           url: '/security/get-captcha-url',
         }),
+        ...withZodCatch(captchaSchema),
       }),
     }
   },
