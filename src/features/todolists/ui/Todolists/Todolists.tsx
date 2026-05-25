@@ -1,23 +1,26 @@
-import { useGetTodolistsQuery } from '@/features/todolists/api/todolistsApi'
+import { useGetTodolistsQuery, useReorderTodolistMutation } from '@/features/todolists/api/todolistsApi'
 import type { DomainTodolist } from '@/features/todolists/lib/types'
 import { TodolistSkeleton } from '@/features/todolists/ui/Todolists/TodolistSkeleton/TodolistSkeleton'
-import { DragDropProvider, useDraggable } from '@dnd-kit/react'
+import { DragDropProvider, type DragEndEvent } from '@dnd-kit/react'
+import { useSortable, isSortable } from '@dnd-kit/react/sortable'
 import { Paper } from '@mui/material'
 import Box from '@mui/material/Box'
 import { TodolistItem } from '@/features/todolists/ui/Todolists/TodolistItem/TodolistItem.tsx'
 
-const DraggableTodolist = ({ todolist }: { todolist: DomainTodolist }) => {
-  const { ref, isDragging } = useDraggable({
+const SortableTodolist = ({ todolist, index }: { todolist: DomainTodolist; index: number }) => {
+  const { ref, isDragging } = useSortable({
     id: todolist.id,
+    index,
   })
 
-  const style = {
-    opacity: isDragging ? 0.3 : 1,
-    cursor: 'grab',
-  }
-
   return (
-    <Box ref={ref} style={style}>
+    <Box
+      ref={ref}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        cursor: 'grab',
+      }}
+    >
       <Paper sx={{ p: '0 20px 20px 20px' }}>
         <TodolistItem todolist={todolist} />
       </Paper>
@@ -26,12 +29,40 @@ const DraggableTodolist = ({ todolist }: { todolist: DomainTodolist }) => {
 }
 
 export const Todolists = () => {
-  const { data: todolists, isLoading } = useGetTodolistsQuery()
-  //const [reorderTodolist] = useReorderTodolistMutation()
+  const { data: items = [], isLoading } = useGetTodolistsQuery()
+  const [reorderTodolist] = useReorderTodolistMutation()
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    if (event.canceled) return
+
+    const { source } = event.operation
+
+    // ✅ Проверяем, что это сортируемый элемент
+    if (!isSortable(source)) return
+    const { initialIndex, index } = source.sortable
+
+    // Если позиция не изменилась — ничего не делаем
+    if (initialIndex === index) return
+    // Получаем putAfterItemId
+    let putAfterItemId: string | null = null
+
+    if (index > initialIndex) {
+      // Движение вниз — вставляем после элемента на позиции index
+      putAfterItemId = items[index].id
+    } else {
+      // Движение вверх — вставляем после предыдущего элемента
+      putAfterItemId = index > 0 ? items[index - 1].id : null
+    }
+
+    reorderTodolist({
+      id: source.id as string,
+      putAfterItemId,
+    })
+  }
 
   if (isLoading) {
     return (
-      <Box style={{ display: 'flex', flexWrap: 'wrap', gap: '32px' }}>
+      <Box style={{ display: 'flex', gap: '32px' }}>
         {Array(3)
           .fill(null)
           .map((_, id) => (
@@ -42,10 +73,10 @@ export const Todolists = () => {
   }
 
   return (
-    <DragDropProvider>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '32px' }}>
-        {todolists?.map((todolist) => {
-          return <DraggableTodolist key={todolist.id} todolist={todolist} />
+    <DragDropProvider onDragEnd={handleDragEnd}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', overflow: 'auto', gap: '32px' }}>
+        {items.map((todolist, index) => {
+          return <SortableTodolist key={todolist.id} todolist={todolist} index={index} />
         })}
       </Box>
     </DragDropProvider>

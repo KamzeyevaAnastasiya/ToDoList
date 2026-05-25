@@ -53,12 +53,36 @@ export const todolistsApi = baseApi.injectEndpoints({
         }),
         invalidatesTags: ['Todolist'],
       }),
-      reorderTodolist: build.mutation<DefaultBaseResponse, { id: string; putAfterItemId: string }>({
+      reorderTodolist: build.mutation<DefaultBaseResponse, { id: string; putAfterItemId: string | null }>({
         query: ({ id, putAfterItemId }) => ({
           method: 'put',
-          url: ` /todo-lists/${id}/reorder`,
+          url: `/todo-lists/${id}/reorder`,
           body: { putAfterItemId },
         }),
+        async onQueryStarted({ id, putAfterItemId }, { dispatch, queryFulfilled }) {
+          const patchResult = dispatch(
+            todolistsApi.util.updateQueryData('getTodolists', undefined, (state) => {
+              const oldIndex = state.findIndex((t) => t.id === id)
+              if (oldIndex === -1) return
+              const [movedItem] = state.splice(oldIndex, 1)
+              if (!putAfterItemId) {
+                state.unshift(movedItem)
+                return
+              }
+              const afterIndex = state.findIndex((t) => t.id === putAfterItemId)
+              if (afterIndex === -1) {
+                state.splice(oldIndex, 0, movedItem)
+                return
+              }
+              state.splice(afterIndex + 1, 0, movedItem)
+            }),
+          )
+          try {
+            await queryFulfilled
+          } catch {
+            patchResult.undo()
+          }
+        },
         invalidatesTags: ['Todolist'],
       }),
     }
