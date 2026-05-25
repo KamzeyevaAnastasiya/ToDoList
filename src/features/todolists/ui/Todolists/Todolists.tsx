@@ -30,7 +30,7 @@ const SortableTodolist = ({ todolist, index }: { todolist: DomainTodolist; index
 
 export const Todolists = () => {
   const { data: items = [], isLoading } = useGetTodolistsQuery()
-  const [reorderTodolist] = useReorderTodolistMutation()
+  const [reorderTodolists] = useReorderTodolistMutation()
 
   const handleDragEnd = (event: DragEndEvent) => {
     if (event.canceled) return
@@ -50,7 +50,7 @@ export const Todolists = () => {
       putAfterItemId = index > 0 ? items[index - 1].id : null
     }
 
-    reorderTodolist({
+    reorderTodolists({
       id: source.id as string,
       putAfterItemId,
     })
