@@ -14,8 +14,12 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
+import * as React from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 import styles from './Login.module.css'
+import { IconButton, InputAdornment } from '@mui/material'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 export const Login = () => {
   const [login] = useLoginMutation()
@@ -59,6 +63,14 @@ export const Login = () => {
     }
   }
 
+  const [showPassword, setShowPassword] = React.useState(false)
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+  }
+
   return (
     <Grid container justifyContent={'center'}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -88,20 +100,47 @@ export const Login = () => {
             <Controller
               name="email"
               control={control}
-              render={({ field }) => <TextField {...field} label="Email" margin="normal" error={!!errors.email} />}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Email"
+                  margin="normal"
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                />
+              )}
             />
-
-            {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
 
             <Controller
               name="password"
               control={control}
               render={({ field }) => (
-                <TextField {...field} type="password" label="Password" margin="normal" error={!!errors.password} />
+                <TextField
+                  {...field}
+                  type={showPassword ? 'text' : 'password'}
+                  label="Password"
+                  margin="normal"
+                  error={!!errors.password}
+                  helperText={errors.password?.message}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
               )}
             />
-
-            {errors.password && <span className={styles.errorMessage}>{errors.password.message}</span>}
 
             <FormControlLabel
               label="Remember me"
@@ -126,10 +165,15 @@ export const Login = () => {
                   name="captcha"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} label="Enter captcha" margin="normal" error={!!errors.captcha} />
+                    <TextField
+                      {...field}
+                      label="Enter captcha"
+                      margin="normal"
+                      error={!!errors.captcha}
+                      helperText={errors.captcha?.message}
+                    />
                   )}
                 />
-                {errors.captcha && <span className={styles.errorMessage}>{errors.captcha.message}</span>}
               </>
             )}
 
