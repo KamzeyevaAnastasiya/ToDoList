@@ -1,6 +1,9 @@
 import { baseApi } from '@/app/baseApi'
+import { defaultBaseResponseSchema } from '@/common/schemas'
 import type { DefaultBaseResponse } from '@/common/types'
-import type { CreateTodolistResponse, Todolist } from '@/features/todolists/api/todolistsApi.types'
+import { withZodCatch } from '@/common/utils/withZodCatch'
+import type { CreateTodolistResponse } from '@/features/todolists/api/todolistsApi.types'
+import { createTodolistResponseSchema, todolistSchema } from '@/features/todolists/lib/schemas'
 import type { DomainTodolist } from '@/features/todolists/lib/types'
 
 export const todolistsApi = baseApi.injectEndpoints({
@@ -11,8 +14,14 @@ export const todolistsApi = baseApi.injectEndpoints({
           method: 'get',
           url: '/todo-lists',
         }),
-        transformResponse: (todolists: Todolist[]): DomainTodolist[] =>
-          todolists.map((todolist) => ({ ...todolist, filter: 'All', entityStatus: 'idle' })),
+        transformResponse: (response: unknown): DomainTodolist[] => {
+          const parsed = todolistSchema.array().safeParse(response)
+          if (!parsed.success) {
+            console.error('Zod validation failed for todolists:', parsed.error.issues)
+            return [] // или выбросить ошибку, если хотите показать fallback UI
+          }
+          return parsed.data.map((todolist) => ({ ...todolist, filter: 'All', entityStatus: 'idle' }))
+        },
         providesTags: ['Todolist'],
       }),
       createTodolist: build.mutation<CreateTodolistResponse, string>({
@@ -21,6 +30,7 @@ export const todolistsApi = baseApi.injectEndpoints({
           url: '/todo-lists',
           body: { title },
         }),
+        ...withZodCatch(createTodolistResponseSchema),
         invalidatesTags: ['Todolist'],
       }),
       deleteTodolist: build.mutation<DefaultBaseResponse, string>({
@@ -51,6 +61,7 @@ export const todolistsApi = baseApi.injectEndpoints({
           url: `/todo-lists/${id}`,
           body: { title },
         }),
+        ...withZodCatch(defaultBaseResponseSchema),
         invalidatesTags: ['Todolist'],
       }),
       reorderTodolist: build.mutation<DefaultBaseResponse, { id: string; putAfterItemId: string | null }>({
@@ -83,6 +94,7 @@ export const todolistsApi = baseApi.injectEndpoints({
             patchResult.undo()
           }
         },
+        ...withZodCatch(defaultBaseResponseSchema),
         invalidatesTags: ['Todolist'],
       }),
     }
