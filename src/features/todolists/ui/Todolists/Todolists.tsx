@@ -37,20 +37,16 @@ export const Todolists = () => {
 
     const { source } = event.operation
 
-    // ✅ Проверяем, что это сортируемый элемент
     if (!isSortable(source)) return
     const { initialIndex, index } = source.sortable
 
-    // Если позиция не изменилась — ничего не делаем
     if (initialIndex === index) return
-    // Получаем putAfterItemId
-    let putAfterItemId: string | null = null
+
+    let putAfterItemId: string | null
 
     if (index > initialIndex) {
-      // Движение вниз — вставляем после элемента на позиции index
       putAfterItemId = items[index].id
     } else {
-      // Движение вверх — вставляем после предыдущего элемента
       putAfterItemId = index > 0 ? items[index - 1].id : null
     }
 
