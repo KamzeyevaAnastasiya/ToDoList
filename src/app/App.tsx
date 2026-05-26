@@ -10,7 +10,6 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { useAppSelector } from '@/common/hooks/useAppSelector'
 import { getTheme } from '@/common/theme'
 import { useEffect, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
 import styles from './App.module.css'
 
 export const App = () => {
@@ -46,7 +45,6 @@ export const App = () => {
         <Header />
         <Routing />
         <ErrorSnackbar />
-        <ToastContainer />
       </div>
     </ThemeProvider>
   )
