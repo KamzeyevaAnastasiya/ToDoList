@@ -19,7 +19,7 @@ export const loginSchema = z.object({
 export const loginResponseSchema = baseResponseSchema(loginSchema)
 
 export const meSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   email: z.string(),
   login: z.string(),
 })
