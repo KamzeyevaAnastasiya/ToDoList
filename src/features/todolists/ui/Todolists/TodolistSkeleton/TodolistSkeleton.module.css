@@ -5,9 +5,12 @@
 }
 
 .container {
-    width: 305px;
-    padding: 10px 20px 20px;
     box-sizing: border-box;
+    width: 305px;
+    height: 440px;
+    padding: 10px 20px 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .title {

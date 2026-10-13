@@ -4,7 +4,7 @@ import Skeleton from '@mui/material/Skeleton'
 
 export const TasksSkeleton = () => (
   <Box style={{ padding: '8px 0' }}>
-    {Array(4)
+    {Array(6)
       .fill(null)
       .map((_, id) => (
         <Box key={id} sx={containerSx}>
