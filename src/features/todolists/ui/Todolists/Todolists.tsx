@@ -17,11 +17,22 @@ const SortableTodolist = ({ todolist, index }: { todolist: DomainTodolist; index
     <Box
       ref={ref}
       style={{
+        width: '100%',
+        height: '440px',
         opacity: isDragging ? 0.5 : 1,
         cursor: 'grab',
       }}
     >
-      <Paper sx={{ p: '0 20px 20px 20px' }}>
+      <Paper
+        sx={{
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          p: '10px 20px 20px',
+        }}
+      >
         <TodolistItem todolist={todolist} />
       </Paper>
     </Box>
@@ -58,7 +69,16 @@ export const Todolists = () => {
 
   if (isLoading) {
     return (
-      <Box style={{ display: 'flex', gap: '32px' }}>
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, 305px)',
+          justifyContent: 'center',
+          gap: '32px',
+          alignItems: 'stretch',
+          width: '100%',
+        }}
+      >
         {Array(3)
           .fill(null)
           .map((_, id) => (
@@ -70,7 +90,16 @@ export const Todolists = () => {
 
   return (
     <DragDropProvider onDragEnd={handleDragEnd}>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', overflow: 'auto', gap: '32px' }}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, 305px)',
+          justifyContent: 'center',
+          gap: '32px',
+          alignItems: 'stretch',
+          width: '100%',
+        }}
+      >
         {items.map((todolist, index) => {
           return <SortableTodolist key={todolist.id} todolist={todolist} index={index} />
         })}

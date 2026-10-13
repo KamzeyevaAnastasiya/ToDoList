@@ -1,11 +1,13 @@
 .common {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .container {
     width: 305px;
-    padding: 10px 20px;
+    padding: 10px 20px 20px;
+    box-sizing: border-box;
 }
 
 .title {
@@ -16,7 +18,6 @@
 
 .createItemForm {
     composes: common;
-    align-items: center;
 }
 
 .tasks {
